@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Travelling - to add title</title>
+    <title>Fun Travelling</title>
     <link rel="stylesheet" href="{{ URL::asset('css/components.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('css/responsee.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('css/icons.css') }}">
@@ -14,31 +14,70 @@
     <link rel="stylesheet" href="{{ URL::asset('css/template-style.css') }}">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
+    <link rel="stylesheet" href="{{ URL::asset('leaflet/leaflet.css') }}" />
+    <script src="{{ URL::asset('leaflet/leaflet.js') }}"></script>
+
+    <link rel="stylesheet" href="{{ URL::asset('leaflet/leaflet-search.css') }}" />
+    {{--<link rel="stylesheet" href="{{ URL::asset('leaflet/search-style.css') }}" />--}}
+    <style>
+        .search-input {
+            font-family:Courier
+        }
+        .search-input,
+        .leaflet-control-search {
+            max-width:400px;
+        }
+    </style>
+
     <script type="text/javascript" src="{{ URL::asset('js/jquery-1.8.3.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/jquery-ui.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/template-scripts.js') }}"></script>
+
+    <style>
+        #map {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #AAA;
+            position: relative;
+            top: 0px;
+        }
+
+        #first-block {
+            margin-top: 0px;
+        }
+
+        #roadTripDetails {
+            margin-top: 90px;
+            margin-left: 50px;
+            width: 90%;
+        }
+
+        #roadTripDetails .s-2 {
+            margin-right: 20px;
+        }
+
+        #roadTripDetails .s-3 {
+            margin-right: 20px;
+        }
+
+        #roadTripDetails > h3 {
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+    </style>
 </head>
 <body class="size-1140">
 <!-- PREMIUM FEATURES BUTTON -->
+{{--
 <a target="_blank" class="hide-s" href="../template/onepage-premium-template/" style="position:fixed;top:130px;right:-14px;z-index:10;"><img src="{{ URL::asset('img/premium-features.png') }}" alt=""></a>
+--}}
 <!-- TOP NAV WITH LOGO -->
 <header>
-    <div id="topbar">
-        <div class="line">
-            <div class="s-12 m-6 l-6">
-                <p>CONTACT US: <strong>0800 200 200</strong> | <strong>contact@sampledomain.com</strong></p>
-            </div>
-            <div class="s-12 m-6 l-6">
-                <div class="social right">
-                    <a><i class="icon-facebook_circle"></i></a> <a><i class="icon-twitter_circle"></i></a> <a><i class="icon-google_plus_circle"></i></a> <a><i class="icon-instagram_circle"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
     <nav>
         <div class="line">
             <div class="s-12 l-2">
-                <p class="logo"><strong>One</strong>page</p>
+                <p class="logo"><strong>FUN</strong>&nbsp;TRAVELLING</p>
             </div>
             <div class="top-nav s-12 l-10">
                 <p class="nav-text">Custom menu text</p>
@@ -48,69 +87,32 @@
                     <li><a href="#about-us">About Us</a></li>
                     <li><a href="#our-work">Our Work</a></li>
                     <li><a href="#services">Services</a></li>
-                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
 <section>
-    <!-- CAROUSEL -->
-    <div id="carousel">
-        <div id="owl-demo" class="owl-carousel owl-theme">
-            <div class="item">
-                <img src="{{ URL::asset('img/first.jpg') }}" alt="">
-                <div class="line">
-                    <div class="text hide-s">
-                        <div class="line">
-                            <div class="prev-arrow hide-s hide-m">
-                                <i class="icon-chevron_left"></i>
-                            </div>
-                            <div class="next-arrow hide-s hide-m">
-                                <i class="icon-chevron_right"></i>
-                            </div>
-                        </div>
-                        <h2>Free Onepage Responsive Template</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.</p>
-                    </div>
-                </div>
+    <!-- DETAILS FORM -->
+    <div id="roadTripDetails" class="s-12 m-12 l-12">
+        <h3>Your road trip details</h3>
+        <form class="customform" action="">
+            <div class="s-3">
+                <input name="source" id="sourceLocationTextInput" placeholder="Source" title="Your e-mail" type="text" disabled />
             </div>
-            <div class="item">
-                <img src="{{ URL::asset('img/second.jpg') }}" alt="">
-                <div class="line">
-                    <div class="text hide-s">
-                        <div class="line">
-                            <div class="prev-arrow hide-s hide-m">
-                                <i class="icon-chevron_left"></i>
-                            </div>
-                            <div class="next-arrow hide-s hide-m">
-                                <i class="icon-chevron_right"></i>
-                            </div>
-                        </div>
-                        <h2>Fully Responsive Components</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.</p>
-                    </div>
-                </div>
+            <div class="s-3">
+                <input name="destination" id="destinationLocationTextInput" placeholder="Destination" title="Your name" type="text" disabled />
             </div>
-            <div class="item">
-                <img src="{{ URL::asset('img/third.jpg') }}" alt="">
-                <div class="line">
-                    <div class="text hide-s">
-                        <div class="line">
-                            <div class="prev-arrow hide-s hide-m">
-                                <i class="icon-chevron_left"></i>
-                            </div>
-                            <div class="next-arrow hide-s hide-m">
-                                <i class="icon-chevron_right"></i>
-                            </div>
-                        </div>
-                        <h2>Build new Layout in 10 minutes!</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.</p>
-                    </div>
-                </div>
+            <div class="s-2">
+                <input name="duration" placeholder="Duration of the trip" title="Your name" type="text" />
             </div>
-        </div>
+            <div class="s-2">
+                <button class="btn btn-primary">Search a plan</button>
+            </div>
+        </form>
     </div>
+    <!-- MAP -->
+    <div id="map"></div>
     <!-- FIRST BLOCK -->
     <div id="first-block">
         <div class="line">
@@ -278,42 +280,6 @@
         </div>
     </div>
     <!-- CONTACT -->
-    <div id="contact">
-        <div class="line">
-            <h2 class="section-title">Contact Us</h2>
-            <div class="margin">
-                <div class="s-12 m-12 l-3 hide-m hide-s margin-bottom right-align">
-                    <img src="{{ URL::asset('img/contact.jpg') }}" alt="">
-                </div>
-                <div class="s-12 m-12 l-4 margin-bottom right-align">
-                    <h3>Vision Design - graphic zoo</h3>
-                    <address>
-                        <p><strong>Adress:</strong> Gallayova 19, 841 02 Bratislava</p>
-                        <p><strong>Country:</strong> Slovakia - Europe</p>
-                        <p><strong>E-mail:</strong> info@visiondesign.sk</p>
-                    </address>
-                    <br />
-                    <h3>Social</h3>
-                    <p><i class="icon-facebook icon"></i> <a href="https://www.facebook.com/pages/Vision-Design-graphic-ZOO/154664684553091">Vision Design - graphic zoo</a></p>
-                    <p><i class="icon-facebook icon"></i> <a href="https://www.facebook.com/myresponsee">Responsee</a></p>
-                    <p class="margin-bottom"><i class="icon-twitter icon"></i> <a href="https://twitter.com/MyResponsee">Responsee</a></p>
-                </div>
-                <div class="s-12 m-12 l-5">
-                    <h3>Example contact form (do not use)</h3>
-                    <form class="customform" action="">
-                        <div class="s-12"><input name="" placeholder="Your e-mail" title="Your e-mail" type="text" /></div>
-                        <div class="s-12"><input name="" placeholder="Your name" title="Your name" type="text" /></div>
-                        <div class="s-12"><textarea placeholder="Your message" name="" rows="5"></textarea></div>
-                        <div class="s-12 m-12 l-4"><button class="color-btn" type="submit">Submit Button</button></div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- MAP -->
-    <div id="map-block">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1247814.3661917313!2d16.569872019090596!3d48.23131953825178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476c8cbf758ecb9f%3A0xddeb1d26bce5eccf!2sGallayova+2150%2F19%2C+841+02+D%C3%BAbravka!5e0!3m2!1ssk!2ssk!4v1440344568394" width="100%" height="450" frameborder="0" style="border:0"></iframe>
-    </div>
 </section>
 <!-- FOOTER -->
 <footer>
@@ -329,6 +295,7 @@
 </footer>
 <script type="text/javascript" src="{{ URL::asset('js/responsee.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('owl-carousel/owl.carousel.js') }}"></script>
+<script src="{{ URL::asset('leaflet/leaflet-search.js') }}"></script>
 <script type="text/javascript">
     jQuery(document).ready(function($) {
         var theme_slider = $("#owl-demo");
@@ -359,6 +326,83 @@
         $(".prev-arrow").click(function() {
             theme_slider.trigger('prev.owl');
         })
+
+        //////////////////////////////////////////////////////////////////////////
+        ///////// ADDED BY US /////////
+        //////////////////////////////////////////////////////////////////////////
+        // See post: http://asmaloney.com/2014/01/code/creating-an-interactive-map-with-leaflet-and-openstreetmap/
+
+        var map = L.map( 'map', {
+            center: [20.0, 5.0],
+            minZoom: 2,
+            zoom: 2
+        })
+
+        L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            subdomains: ['a', 'b', 'c']
+        }).addTo( map )
+
+        /*
+        var myURL = jQuery( 'script[src$="leaf-demo.js"]' ).attr( 'src' ).replace( 'leaf-demo.js', '' )
+
+        var myIcon = L.icon({
+            iconUrl: myURL + 'images/pin24.png',
+            iconRetinaUrl: myURL + 'images/pin48.png',
+            iconSize: [29, 24],
+            iconAnchor: [9, 21],
+            popupAnchor: [0, -14]
+        })
+
+        for ( var i=0; i < markers.length; ++i )
+        {
+            L.marker( [markers[i].lat, markers[i].lng], {icon: myIcon} )
+                .bindPopup( '<a href="' + markers[i].url + '" target="_blank">' + markers[i].name + '</a>' )
+                .addTo( map );
+        }*/
+
+        {{--
+        var greenIcon = L.icon({
+            iconUrl: '{{ URL::asset('img/leaf-green.png') }}',
+            shadowUrl: '{{ URL::asset('img/leaf-shadow.png') }}',
+
+            iconSize:     [38, 95], // size of the icon
+            shadowSize:   [50, 64], // size of the shadow
+            iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+            shadowAnchor: [4, 62],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        });
+
+        L.marker([51.5, -0.09], {icon: greenIcon}).addTo(map);
+        --}}
+
+        var popup = L.popup();
+
+        function onMapClick(e) {
+            popup
+                .setLatLng(e.latlng)
+                .setContent("You clicked the map at " + e.latlng.toString())
+                .openOn(map);
+        }
+
+        map.on('click', onMapClick);
+
+        a = 0;
+        var searchHandler;
+        map.addControl( searchHandler = new L.Control.Search({
+            url: 'http://nominatim.openstreetmap.org/search?format=json&q={s}',
+            jsonpParam: 'json_callback',
+            propertyName: 'display_name',
+            propertyLoc: ['lat','lon'],
+            marker: L.circleMarker([0,0],{radius:30}),
+            autoCollapse: true,
+            autoType: true,
+            minLength: 2,
+            zoom: 10
+        }) );
+
+        //L.marker([46, 26]).addTo(map);
+        //map.setView([46, 26], 10);
     });
 </script>
 </body>
