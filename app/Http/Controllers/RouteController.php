@@ -259,6 +259,7 @@ class RouteController extends Controller
             // If we still have time, choose a new stop to see even more things
             if ($totalTime > 0) {
                 $chosen_station = $this->chooseStation($start, $finish, $visitedStations);
+
                 // If there are no charging stations left, return the current best route
                 if (!$chosen_station) {
                     return $bestRoute;
@@ -293,7 +294,7 @@ class RouteController extends Controller
 
                 $newRoute = array_merge($leftRoute, $rightRoute);
 
-                if (count($newRoute) - 1 > $bestRoute) {
+                if (count($newRoute) - 1 > count($bestRoute)) {
                     $bestRoute = $newRoute;
                 }
             }
@@ -324,7 +325,7 @@ class RouteController extends Controller
 //            'lon' => 28.635885
 //        ];
 //
-//        $time = 15;
+//        $time = 40;
 
         $route = $this->computeRoute($start, $finish, $time);
 
