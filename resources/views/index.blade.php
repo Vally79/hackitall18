@@ -83,10 +83,7 @@
                 <p class="nav-text">Custom menu text</p>
                 <ul class="right">
                     <li class="active-item"><a href="#carousel">Home</a></li>
-                    <li><a href="#features">Features</a></li>
                     <li><a href="#about-us">About Us</a></li>
-                    <li><a href="#our-work">Our Work</a></li>
-                    <li><a href="#services">Services</a></li>
                 </ul>
             </div>
         </div>
@@ -113,183 +110,15 @@
     </div>
     <!-- MAP -->
     <div id="map"></div>
-    <!-- FIRST BLOCK -->
-    <div id="first-block">
-        <div class="line">
-            <h1>Amazing Responsive Business Template</h1>
-            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-            <div class="s-12 m-4 l-2 center"><a class="white-btn" href="#contact">Contact Us</a></div>
-        </div>
-    </div>
-    <!-- FEATURES -->
-    <div id="features">
-        <div class="line">
-            <div class="margin">
-                <div class="s-12 m-6 l-3 margin-bottom">
-                    <i class="icon-tablet icon3x"></i>
-                    <h2>Fully responsive</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                </div>
-                <div class="s-12 m-6 l-3 margin-bottom">
-                    <i class="icon-isight icon3x"></i>
-                    <h2>Clean design</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat adipiscing.</p>
-                </div>
-                <div class="s-12 m-6 l-3 margin-bottom">
-                    <i class="icon-star icon3x"></i>
-                    <h2>Valid code</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna erat volutpat.</p>
-                </div>
-                <div class="s-12 m-6 l-3 margin-bottom">
-                    <i class="icon-heart icon3x"></i>
-                    <h2>Totally free</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat nonummy.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ABOUT US -->
-    <div id="about-us">
-        <div class="s-12 m-12 l-6 media-container">
-            <img src="{{ URL::asset('img/about.jpg') }}" alt="">
-        </div>
-        <article class="s-12 m-12 l-6">
-            <h2>We are<br> Web Design<br> Heroes</h2>
-            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
-                dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit
-                lobortis nisl ut aliquip ex ea commodo consequat.
-            </p>
-            <div class="about-us-icons">
-                <i class="icon-paperplane_ico"></i> <i class="icon-trophy"></i> <i class="icon-clock"></i>
-            </div>
-        </article>
-    </div>
-    <!-- OUR WORK -->
-    <div id="our-work">
-        <div class="line">
-            <h2 class="section-title">Our Work</h2>
-            <div class="tabs">
-                <div class="tab-item tab-active">
-                    <a class="tab-label active-btn">Web Design</a>
-                    <div class="tab-content">
-                        <div class="margin">
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por1.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por4.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por6.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por3.jpg') }}" alt=""></a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-item">
-                    <a class="tab-label">Development</a>
-                    <div class="tab-content">
-                        <div class="margin">
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por7.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por5.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por1.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por2.jpg') }}" alt=""></a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-item">
-                    <a class="tab-label">Social Campaigns</a>
-                    <div class="tab-content">
-                        <div class="margin">
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por4.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por6.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por3.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por5.jpg') }}" alt=""></a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-item">
-                    <a class="tab-label">Photography</a>
-                    <div class="tab-content">
-                        <div class="margin">
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por7.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por2.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por5.jpg') }}" alt=""></a></div>
-                            <div class="s-12 m-6 l-3"><a class="our-work-container lightbox margin-bottom"><div class="our-work-text"><h4>Lorem Ipsum Dolor</h4><p>Laoreet dolore magna aliquam erat volutpat.</p></div><img src="{{ URL::asset('img/por6.jpg') }}" alt=""></a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- SERVICES -->
-    <div id="services">
-        <div class="line">
-            <h2 class="section-title">What we do</h2>
-            <div class="margin">
-                <div class="s-12 m-6 l-4 margin-bottom">
-                    <i class="icon-vector"></i>
-                    <div class="service-text">
-                        <h3>We create</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                    </div>
-                </div>
-                <div class="s-12 m-6 l-4 margin-bottom">
-                    <i class="icon-eye"></i>
-                    <div class="service-text">
-                        <h3>We look to the future</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                    </div>
-                </div>
-                <div class="s-12 m-12 l-4 margin-bottom">
-                    <i class="icon-random"></i>
-                    <div class="service-text">
-                        <h3>We find a solution</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- LATEST NEWS -->
-    <div id="latest-news">
-        <div class="line">
-            <h2 class="section-title">Latest News</h2>
-            <div class="margin">
-                <div class="s-12 m-6 l-6">
-                    <div class="s-12 l-2">
-                        <div class="news-date">
-                            <p class="day">28</p><p class="month">AUGUST</p><p class="year">2015</p>
-                        </div>
-                    </div>
-                    <div class="s-12 l-10">
-                        <div class="news-text">
-                            <h4>First latest News</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="s-12 m-6 l-6">
-                    <div class="s-12 l-2">
-                        <div class="news-date">
-                            <p class="day">12</p><p class="month">JULY</p><p class="year">2015</p>
-                        </div>
-                    </div>
-                    <div class="s-12 l-10">
-                        <div class="news-text">
-                            <h4>Second latest News</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- CONTACT -->
 </section>
 <!-- FOOTER -->
 <footer>
     <div class="line">
         <div class="s-12 l-6">
-            <p>Copyright 2018, Vision Design - graphic zoo</p>
-            <p>All images have been purchased from Bigstock. Do not use the images in your website.</p>
+            <p>Copyright 2018, NoClue team</p>
         </div>
         <div class="s-12 l-6">
-            <a class="right" href="http://www.myresponsee.com" title="Responsee - lightweight responsive framework">Design and coding<br> by Responsee Team</a>
+            <a class="right" href="http://www.myresponsee.com" title="Responsee - lightweight responsive framework">Design and coding<br> by NoClue Team</a>
         </div>
     </div>
 </footer>
