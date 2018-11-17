@@ -337,8 +337,11 @@ class RouteController extends Controller
             $rezultat = array_merge($rezultat, $this->getRoute($a, $b)['coordinates']);
         }
 
+
+
         return JsonResponse::create([
-            'route' => $rezultat
+            'route' => $rezultat,
+            'waypoints' => $route
         ]);
     }
 }

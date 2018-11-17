@@ -409,7 +409,6 @@
                 finish: JSON.parse($('#destinationLocationTextInput').val()),
                 duration: $('#durationInput').val(),
             };
-            console.log('getRoute?latS = ' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration);
 
             $.ajax({
                 url: 'getRoute?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration,
@@ -419,7 +418,7 @@
                 },
                 success: function (response) {
                     // create a red polyline from an array of LatLng points
-                    console.log(response);
+                    var waypoints = response.waypoints;
                     response = response.route;
                     var latlngs = [[response[0].lat, response[0].lon]];
                     for (var i = 1 ; i < response.length ; i++) {
@@ -429,6 +428,15 @@
                     var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
                     // zoom the map to the polyline
                     map.fitBounds(polyline.getBounds());
+
+                    var electricStation = L.icon({
+                        iconUrl: 'electric-station.png',
+
+                        iconSize: [32, 32], // size of the icon
+                    });
+
+                    for(var i = 1; i < waypoints.length; i++)
+                        L.marker([waypoints[i].lat, waypoints[i].lon]).addTo(map);
                 }
             });
         });
