@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 class RouteController extends Controller
 {
     private $chargingStations;
+    private $visited = [];
 
     /**
      * Return a list of coordinates for each charging station in a country.
@@ -182,9 +183,9 @@ class RouteController extends Controller
             }
 
             // Compute the max distance for left route and right route
-            $leftDist = $this->distance($start['lat'], $start['lon'], $chosen_station['lat'], $chosen_station['lon']);
-            $rightDist = $this->distance($chosen_station['lat'], $chosen_station['lon'], $finish['lat'], $finish['lon']);
-            $leftTime = $leftDist / ($leftDist + $rightDist) * $max_time;
+            $startDist = $this->distance($start['lat'], $start['lon'], $chosen_station['lat'], $chosen_station['lon']);
+            $finishDist = $this->distance($chosen_station['lat'], $chosen_station['lon'], $finish['lat'], $finish['lon']);
+            $leftTime = $startDist / ($startDist + $finishDist) * $max_time;
             $rightTime = $max_time - $leftTime;
 
             // If there was no left route found, return the best route
@@ -220,7 +221,7 @@ class RouteController extends Controller
                 // Get the closest attraction that has not been visited
                 foreach ($attractions as $key => $attraction) {
                     $dist = $this->distance($lastNode['lat'], $lastNode['lon'], $attraction['lat'], $attraction['lon']);
-                    if ($dist < $minDist && !isset($visited[$key])) {
+                    if ($dist < $minDist && !isset($visited[$key]) && !isset($this->visited[json_encode($attraction)])) {
                         $minDist = $dist;
                         $nextNode = $key;
                     }
@@ -253,6 +254,10 @@ class RouteController extends Controller
                 array_pop($bestRoute);
             }
 
+            foreach ($bestRoute as $value) {
+                $this->visited[json_encode($value)] = true;
+            }
+
             $bestRoute[] = $finish;
 
             // If we still have time, choose a new stop to see even more things
@@ -265,33 +270,33 @@ class RouteController extends Controller
                 }
 
                 // Compute the max distance for left route and right route
-                $leftDist = $this->distance($start['lat'], $start['lon'], $chosen_station['lat'], $chosen_station['lon']);
-                $rightDist = $this->distance($chosen_station['lat'], $chosen_station['lon'], $finish['lat'], $finish['lon']);
+                $startDist = $this->distance($start['lat'], $start['lon'], $chosen_station['lat'], $chosen_station['lon']);
+                $finishDist = $this->distance($chosen_station['lat'], $chosen_station['lon'], $finish['lat'], $finish['lon']);
 
                 // Account for the time spent in the charging station
-                $max_time -= $leftDist * $consumption / 40;
+                $max_time -= $startDist * $consumption / 40;
 
-                $leftTime = $leftDist / ($leftDist + $rightDist) * $max_time;
-                $rightTime = $max_time - $leftTime;
+                $startTime = $startDist / ($startDist + $finishDist) * $max_time;
+                $finishTime = $max_time - $startTime;
 
                 // If there was no left route found, return the best route
                 $saveStations = $visitedStations;
-                $leftRoute = $this->computeRoute($start, $chosen_station, $leftTime, $visitedStations);
-                if (!$leftRoute) {
+                $startRoute = $this->computeRoute($start, $chosen_station, $startTime, $visitedStations);
+                if (!$startRoute) {
                     $visitedStations = $saveStations;
                     return $bestRoute;
                 }
 
                 // Same for right route
-                $rightRoute = $this->computeRoute($chosen_station, $finish, $rightTime, $visitedStations);
-                if (!$rightRoute) {
+                $finishRoute = $this->computeRoute($chosen_station, $finish, $finishTime, $visitedStations);
+                if (!$finishRoute) {
                     $visitedStations = $saveStations;
                     return $bestRoute;
                 }
 
-                unset($rightRoute[0]);
+                unset($finishRoute[0]);
 
-                $newRoute = array_merge($leftRoute, $rightRoute);
+                $newRoute = array_merge($startRoute, $finishRoute);
 
                 if (count($newRoute) - 1 > count($bestRoute)) {
                     $bestRoute = $newRoute;
@@ -312,16 +317,16 @@ class RouteController extends Controller
         $time = $request->duration;
 
 //        $start = [
-//            'lat' => 44.439663,
-//            'lon' => 26.096306
+//            'lat' => 47.161494,
+//            'lon' => 27.5840504
 //        ];
 //
 //        $finish = [
-//            'lat' => 44.171886,
-//            'lon' => 28.635885
+//            'lat' => 46.7693367,
+//            'lon' => 23.5900604
 //        ];
 //
-//        $time = 40;
+//        $time = 15;
 
         $route = $this->computeRoute($start, $finish, $time);
 
