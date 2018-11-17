@@ -1,0 +1,17 @@
+● apache2.service - The Apache HTTP Server
+   Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)
+  Drop-In: /lib/systemd/system/apache2.service.d
+           └─apache2-systemd.conf
+   Active: failed (Result: exit-code) since Sat 2018-11-17 15:24:33 EET; 41s ago
+  Process: 4236 ExecStop=/usr/sbin/apachectl stop (code=exited, status=1/FAILURE)
+  Process: 18703 ExecReload=/usr/sbin/apachectl graceful (code=exited, status=0/SUCCESS)
+  Process: 4390 ExecStart=/usr/sbin/apachectl start (code=exited, status=1/FAILURE)
+ Main PID: 24082 (code=exited, status=0/SUCCESS)
+
+nov 17 15:24:33 diana-GL552VX systemd[1]: Starting The Apache HTTP Server...
+nov 17 15:24:33 diana-GL552VX apachectl[4390]: apache2: Syntax error on line 225 of /etc/apache2/apache2.conf: Syntax error on line 38 of /etc/apache2/sites-enabled/hackitall.conf: Expected </Directory> but saw </VirtualHost>
+nov 17 15:24:33 diana-GL552VX apachectl[4390]: Action 'start' failed.
+nov 17 15:24:33 diana-GL552VX apachectl[4390]: The Apache error log may have more information.
+nov 17 15:24:33 diana-GL552VX systemd[1]: apache2.service: Control process exited, code=exited status=1
+nov 17 15:24:33 diana-GL552VX systemd[1]: apache2.service: Failed with result 'exit-code'.
+nov 17 15:24:33 diana-GL552VX systemd[1]: Failed to start The Apache HTTP Server.
