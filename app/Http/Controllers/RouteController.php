@@ -80,6 +80,53 @@ class RouteController extends Controller
         return $details;
     }
 
+    public function getTouristAttractions($startPoint, $endPoint)
+    {
+        $latKm = 110;
+        $lonKm = 80;
+        $lonDiff = abs($endPoint['lon'] - $startPoint['lon']) * $lonKm;
+        $latDiff = abs($endPoint['lat'] - $startPoint['lat']) * $latKm;
+
+        // If trip is along X axis
+        if ($lonDiff > $latDiff) {
+            $dim = $lonDiff / $latKm / 2; // Difference in latitude degrees
+            $leftMargin = min($startPoint['lon'], $endPoint['lon']);
+            $rightMargin = max($startPoint['lon'], $endPoint['lon']);
+            $center = ($startPoint['lat'] + $endPoint['lat']) / 2;
+            $topMargin = $center + $dim;
+            $bottomMargin = $center - $dim;
+        } else {
+            $dim = $latDiff / $lonKm / 2; // Difference in longitude degrees
+            $topMargin = max($startPoint['lat'], $endPoint['lat']);
+            $bottomMargin = min($startPoint['lat'], $endPoint['lat']);
+            $center = ($startPoint['lon'] + $endPoint['lon']) / 2;
+            $leftMargin = $center - $dim;
+            $rightMargin = $center + $dim;
+        }
+
+        $client = new Client();
+        $url = "https://nominatim.openstreetmap.org/search.php?q=attractions+in+romania" .
+            "&viewbox=$leftMargin,$topMargin,$rightMargin,$bottomMargin&format=json&limit=100";
+        $response = $client->get($url);
+
+        if ($response->getStatusCode() != 200) {
+            return false;
+        }
+
+        $body = (string) $response->getBody();
+        $items = json_decode($body);
+        $coordinates = [];
+
+        foreach ($items as $item) {
+            $coordinates[] = [
+                'lat' => $item->lat,
+                'lon' => $item->lon
+            ];
+        }
+
+        return $coordinates;
+    }
+
     public function main(Request $request)
     {
         $this->chargingStations = $this->getChargingStations();
