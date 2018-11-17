@@ -66,7 +66,7 @@ class RouteController extends Controller
         $decoded = json_decode($body);
         $details = [
             'distance' => $decoded->routes[0]->summary->distance,
-            'duration' => $decoded->routes[0]->summary->duration / 360,
+            'time' => $decoded->routes[0]->summary->duration / 360,
         ];
         $details['coordinates'] = [];
 
@@ -124,7 +124,7 @@ class RouteController extends Controller
                 return $raspuns;
             }
         } else {
-            $raspuns['drum'] = array();
+            $raspuns['drum'] = $result['coordinates'];
             array_push($raspuns['drum'], $start);
             $atractii = getTouristAttractions($start, $finish, );
             $directie = 0;
