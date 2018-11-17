@@ -95,13 +95,13 @@
         <h3>Your road trip details</h3>
         <form class="customform" action="">
             <div class="s-3">
-                <input name="source" id="sourceLocationTextInput" placeholder="Source" title="Your e-mail" type="text" disabled />
+                <input name="source" id="sourceLocationTextInput" placeholder="Start (pick from map)" type="text" disabled />
             </div>
             <div class="s-3">
-                <input name="destination" id="destinationLocationTextInput" placeholder="Destination" title="Your name" type="text" disabled />
+                <input name="destination" id="destinationLocationTextInput" placeholder="Destination (pick from map)" type="text" disabled />
             </div>
             <div class="s-2">
-                <input id= "durationInput" name="duration" placeholder="Duration of the trip" title="Your name" type="text" />
+                <input id= "durationInput" name="duration" placeholder="Duration of the trip (hours)" title="Your name" type="text" />
             </div>
             <div class="s-2">
                 <button id="buton" class="btn btn-primary">Search a plan</button>
@@ -234,8 +234,8 @@
         $('#buton').on('click', function (e) {
             e.preventDefault();
             var data = {
-                start: JSON.parse($('#sourceLocationTextInput').val()),
-                finish: JSON.parse($('#destinationLocationTextInput').val()),
+                start: searchHandler.options.sourceLocationCoordinates,
+                finish: searchHandler.options.destinationLocationCoordinates,
                 duration: $('#durationInput').val(),
             };
 
