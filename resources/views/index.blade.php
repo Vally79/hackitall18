@@ -418,7 +418,17 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
-                    console.log(response)
+                    // create a red polyline from an array of LatLng points
+                    console.log(response);
+                    response = response.route;
+                    var latlngs = [[response[0].lat, response[0].lon]];
+                    for (var i = 1 ; i < response.length ; i++) {
+                        latlngs.push([response[i].lat, response[i].lon]);
+                    }
+                    console.log(latlngs);
+                    var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+                    // zoom the map to the polyline
+                    map.fitBounds(polyline.getBounds());
                 }
             });
         });

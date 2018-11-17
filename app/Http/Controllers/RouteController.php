@@ -73,8 +73,8 @@ class RouteController extends Controller
 
         foreach ($decoded->routes[0]->geometry->coordinates as $coordinate) {
             $details['coordinates'][] = [
-                'lat' => $coordinate[0],
-                'lon' => $coordinate[1]
+                'lat' => $coordinate[1],
+                'lon' => $coordinate[0]
             ];
         }
 
@@ -328,9 +328,17 @@ class RouteController extends Controller
 //        $time = 40;
 
         $route = $this->computeRoute($start, $finish, $time);
+        $rezultat = [];
+        for($i = 0; $i < count($route) - 1; $i++)
+        {
+            $a = $route[$i];
+            $b = $route[$i + 1];
+            sleep(0.01);
+            $rezultat = array_merge($rezultat, $this->getRoute($a, $b)['coordinates']);
+        }
 
         return JsonResponse::create([
-            'route' => $route
+            'route' => $rezultat
         ]);
     }
 }
