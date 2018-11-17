@@ -50,6 +50,7 @@ class RouteController extends Controller
      */
     public function getRoute($startPoint, $endPoint)
     {
+
         $client = new Client();
         $url = "https://api.openrouteservice.org/directions?api_key=" . env('ORS_KEY') .
             "&coordinates=" . $startPoint['lon'] . "," . $startPoint['lat'] . "|" . $endPoint['lon'] . "," . $endPoint['lat'] .
@@ -306,10 +307,13 @@ class RouteController extends Controller
     {
         $this->chargingStations = $this->getChargingStations();
         unset($this->chargingStations[3]);
-        $start = $request->start;
-        $finish = $request->finish;
+        $start = array();
+        $start['lat'] = $request->latS;
+        $start['lon'] = $request->lonS;
+        $finish = array();
+        $finish['lat'] = $request->lat;
+        $finish['lon'] = $request->lon;
         $time = $request->duration;
-
 //        $start = [
 //            'lat' => 44.439663,
 //            'lon' => 26.096306

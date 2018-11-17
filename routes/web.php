@@ -18,3 +18,8 @@ Route::get('/', function () {
 Route::get('test', [
     'uses' => 'RouteController@getChargingStations',
 ]);
+
+Route::get('/getRoute', [
+    'uses' => 'RouteController@main',
+    'as' => 'getRoute',
+]);

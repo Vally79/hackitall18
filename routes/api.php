@@ -17,9 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/getRoute', [
-    'uses' => 'RouteController@main'
-]);
+
 
 Route::get('/test', [
     'uses' => 'RouteController@getTouristAttractions',
