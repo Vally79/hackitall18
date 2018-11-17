@@ -51,6 +51,7 @@ class RouteController extends Controller
      */
     public function getRoute($startPoint, $endPoint)
     {
+
         $client = new Client();
         $url = "https://api.openrouteservice.org/directions?api_key=" . env('ORS_KEY') .
             "&coordinates=" . $startPoint['lon'] . "," . $startPoint['lat'] . "|" . $endPoint['lon'] . "," . $endPoint['lat'] .
@@ -73,8 +74,8 @@ class RouteController extends Controller
 
         foreach ($decoded->routes[0]->geometry->coordinates as $coordinate) {
             $details['coordinates'][] = [
-                'lat' => $coordinate[0],
-                'lon' => $coordinate[1]
+                'lat' => $coordinate[1],
+                'lon' => $coordinate[0]
             ];
         }
 
@@ -312,10 +313,13 @@ class RouteController extends Controller
     {
         $this->chargingStations = $this->getChargingStations();
         unset($this->chargingStations[3]);
-        $start = $request->start;
-        $finish = $request->finish;
+        $start = array();
+        $start['lat'] = $request->latS;
+        $start['lon'] = $request->lonS;
+        $finish = array();
+        $finish['lat'] = $request->lat;
+        $finish['lon'] = $request->lon;
         $time = $request->duration;
-
 //        $start = [
 //            'lat' => 47.161494,
 //            'lon' => 27.5840504
@@ -329,9 +333,17 @@ class RouteController extends Controller
 //        $time = 15;
 
         $route = $this->computeRoute($start, $finish, $time);
+        $rezultat = [];
+        for($i = 0; $i < count($route) - 1; $i++)
+        {
+            $a = $route[$i];
+            $b = $route[$i + 1];
+            sleep(0.01);
+            $rezultat = array_merge($rezultat, $this->getRoute($a, $b)['coordinates']);
+        }
 
         return JsonResponse::create([
-            'route' => $route
+            'route' => $rezultat
         ]);
     }
 }

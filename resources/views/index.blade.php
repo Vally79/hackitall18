@@ -104,10 +104,10 @@
                 <input name="destination" id="destinationLocationTextInput" placeholder="Destination" title="Your name" type="text" disabled />
             </div>
             <div class="s-2">
-                <input name="duration" placeholder="Duration of the trip" title="Your name" type="text" />
+                <input id= "durationInput" name="duration" placeholder="Duration of the trip" title="Your name" type="text" />
             </div>
             <div class="s-2">
-                <button class="btn btn-primary">Search a plan</button>
+                <button id="buton" class="btn btn-primary">Search a plan</button>
             </div>
         </form>
     </div>
@@ -400,6 +400,38 @@
             minLength: 2,
             zoom: 10
         }) );
+
+
+        $('#buton').on('click', function (e) {
+            e.preventDefault();
+            var data = {
+                start: JSON.parse($('#sourceLocationTextInput').val()),
+                finish: JSON.parse($('#destinationLocationTextInput').val()),
+                duration: $('#durationInput').val(),
+            };
+            console.log('getRoute?latS = ' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration);
+
+            $.ajax({
+                url: 'getRoute?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration,
+                method: 'get',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    // create a red polyline from an array of LatLng points
+                    console.log(response);
+                    response = response.route;
+                    var latlngs = [[response[0].lat, response[0].lon]];
+                    for (var i = 1 ; i < response.length ; i++) {
+                        latlngs.push([response[i].lat, response[i].lon]);
+                    }
+                    console.log(latlngs);
+                    var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+                    // zoom the map to the polyline
+                    map.fitBounds(polyline.getBounds());
+                }
+            });
+        });
 
         //L.marker([46, 26]).addTo(map);
         //map.setView([46, 26], 10);
