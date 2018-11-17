@@ -17,10 +17,10 @@ class RouteController extends Controller
      * @param string $country
      * @return array|bool
      */
-    public function getChargingStations($country = 'romania')
+    public function getChargingStations($country = 'japan')
     {
         $client = new Client();
-        $url = "https://nominatim.openstreetmap.org/search.php?q=charging+stations+in+$country&amenity=charging_station&format=json";
+        $url = "https://nominatim.openstreetmap.org/search.php?q=charging+stations+in+$country&amenity=charging_station&format=json&limit=1000";
         $response = $client->get($url);
 
         if ($response->getStatusCode() != 200) {
@@ -58,7 +58,18 @@ class RouteController extends Controller
             "&profile=driving-car" .
             "&units=km" .
             "&geometry_format=geojson";
-        $response = $client->get($url);
+
+        try {
+            $response = $client->get($url);
+        } catch (\Exception $exception) {
+            $dist = $this->distance($startPoint['lat'], $startPoint['lon'], $endPoint['lat'], $endPoint['lon']);
+
+            return [
+                'distance' => $dist,
+                'time' => $dist / 50,
+                'coordinates' => [$startPoint, $endPoint]
+            ];
+        }
 
         if ($response->getStatusCode() != 200) {
             return false;
@@ -107,7 +118,7 @@ class RouteController extends Controller
         }
 
         $client = new Client();
-        $url = "https://nominatim.openstreetmap.org/search.php?q=attractions+in+romania" .
+        $url = "https://nominatim.openstreetmap.org/search.php?q=attractions+in+japan&highway=ways" .
             "&viewbox=$leftMargin,$topMargin,$rightMargin,$bottomMargin&format=json&limit=100";
         $response = $client->get($url);
 
@@ -227,6 +238,10 @@ class RouteController extends Controller
                         $nextNode = $key;
                     }
                 }
+
+                if ($nextNode == -1) {
+                    break;
+                }
                 // Add the attraction to the list
                 $bestRoute[] = $attractions[$nextNode];
                 // Decrease the total power by the power consumed to reach the attraction
@@ -245,6 +260,8 @@ class RouteController extends Controller
                 }
 
             } while (true);
+
+            $dist = $this->distance(end($bestRoute)['lat'], end($bestRoute)['lon'], $finish['lat'], $finish['lon']);
 
             $totalPower -= $dist * $consumption;
             $totalTime -= $dist / $avgSpeed;
@@ -312,7 +329,6 @@ class RouteController extends Controller
     public function main(Request $request)
     {
         $this->chargingStations = $this->getChargingStations();
-        unset($this->chargingStations[3]);
         $start = array();
         $start['lat'] = $request->latS;
         $start['lon'] = $request->lonS;
@@ -320,17 +336,6 @@ class RouteController extends Controller
         $finish['lat'] = $request->lat;
         $finish['lon'] = $request->lon;
         $time = $request->duration;
-//        $start = [
-//            'lat' => 47.161494,
-//            'lon' => 27.5840504
-//        ];
-//
-//        $finish = [
-//            'lat' => 46.7693367,
-//            'lon' => 23.5900604
-//        ];
-//
-//        $time = 15;
 
         $route = $this->computeRoute($start, $finish, $time);
         $rezultat = [];
