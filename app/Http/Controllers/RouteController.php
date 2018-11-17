@@ -66,7 +66,7 @@ class RouteController extends Controller
         $decoded = json_decode($body);
         $details = [
             'distance' => $decoded->routes[0]->summary->distance,
-            'time' => $decoded->routes[0]->summary->duration / 360,
+            'time' => $decoded->routes[0]->summary->duration / 3600,
         ];
         $details['coordinates'] = [];
 
@@ -113,7 +113,7 @@ class RouteController extends Controller
             return false;
         }
 
-        $body = (string) $response->getBody();
+        $body = (string)$response->getBody();
         $items = json_decode($body);
         $coordinates = [];
 
@@ -127,94 +127,205 @@ class RouteController extends Controller
         return $coordinates;
     }
 
-    public function distance($lat1, $lon1, $lat2, $lon2) {
-
+    public function distance($lat1, $lon1, $lat2, $lon2)
+    {
         $theta = $lon1 - $lon2;
-        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
         $dist = acos($dist);
         $dist = rad2deg($dist);
         $miles = $dist * 60 * 1.1515;
+
         return ($miles * 1.609344);
     }
 
-    public function computeRoute($start, $finish, $max_time)
+    private function chooseStation($start, $finish, &$visitedStations)
+    {
+        $min_sum = INF;
+        $chosen_station = -1;
+        foreach ($this->chargingStations as $key => $station) {
+            $dist = $this->distance($start['lat'], $start['lon'], $station['lat'], $station['lon']);
+            $dist += $this->distance($finish['lat'], $finish['lon'], $station['lat'], $station['lon']);
+
+            if ($dist < $min_sum && !isset($visitedStations[$key])) {
+                $min_sum = $dist;
+                $chosen_station = $key;
+            }
+        }
+
+        if ($chosen_station == -1) {
+            return false;
+        }
+
+        $visitedStations[$chosen_station] = true;
+
+        return $this->chargingStations[$chosen_station];
+    }
+
+    public function computeRoute($start, $finish, $max_time, &$visitedStations = [])
     {
         $result = $this->getRoute($start, $finish);
         $time = $result['time'];
+        $consumption = 0.175;
+        $avgSpeed = 50;
+        $power = $result['distance'] * $consumption;
 
-        if ($time > $max_time)
-            return "No";
+        if ($time > $max_time) {
+            return [];
+        }
 
-        $raspuns = array();
-        $raspuns['time'] = 0;
-
-        $power = $result['distance'] * 0.175;
         if ($power > 100) {
-            $min_sum = INF;
-            $chosen_station = -1;
-            foreach ($this->chargingStations as $station) {
-                $a = $this->distance($start['lat'], $start['lon'], $station['lat'], $station['lon']);
-                $a += $this->distance($finish['lat'], $finish['lon'], $station['lat'], $station['lon']);
-                if ($a < $min_sum) {
-                    $min_sum = $a;
-                    $chosen_station = $station;
-                }
+
+            $chosen_station = $this->chooseStation($start, $finish, $visitedStations);
+            // If there are no charging stations left, return the current best route
+            if (!$chosen_station) {
+                return [];
             }
-            $prima = $this->computeRoute($start, $chosen_station, $max_time / 2 - 1);
-            $doua = $this->computeRoute($chosen_station, $finish, $max_time / 2 - 1);
-            if ($prima == "No" || $doua == "No" || $prima['time'] + $doua['time'] > $max_time)
-                return "No";
-            else {
-                $raspuns = array();
-                $raspuns['time'] = $prima['time'] + $doua['time'] + 2;
-                $raspuns['drum'] = array_merge($prima['drum'], $doua['drum']);
-                return $raspuns;
+
+            // Compute the max distance for left route and right route
+            $leftDist = $this->distance($start['lat'], $start['lon'], $chosen_station['lat'], $chosen_station['lon']);
+            $rightDist = $this->distance($chosen_station['lat'], $chosen_station['lon'], $finish['lat'], $finish['lon']);
+            $leftTime = $leftDist / ($leftDist + $rightDist) * $max_time;
+            $rightTime = $max_time - $leftTime;
+
+            // If there was no left route found, return the best route
+            $saveStations = $visitedStations;
+            $leftRoute = $this->computeRoute($start, $chosen_station, $leftTime, $visitedStations);
+            if (!$leftRoute) {
+                $visitedStations = $saveStations;
+                return [];
             }
+
+            // Same for right route
+            $rightRoute = $this->computeRoute($chosen_station, $finish, $rightTime, $visitedStations);
+            if (!$rightRoute) {
+                $visitedStations = $saveStations;
+                return [];
+            }
+
+            // Otherwise, return the new route as it is the best
+            return array_merge($leftRoute, $rightRoute);
         } else {
-            $raspuns['drum'] = $result['coordinates'];
-            array_push($raspuns['drum'], $start);
-            $atractii = $this->getTouristAttractions($start, $finish);
-            $directie = 0;
-            if (abs($start['lat'] - $finish - ['lat']) < abs($start['lon'] - $finish['lon']))
-                $directie = 1;
-            $marime = count($atractii);
-            $curent = $start;
-            $gasite = true;
-            while ($gasite) {
-                $dist = INF;
-                $gasite = false;
-                $catelea = 0;
-                $cate = count($atractii);
-                $candidat = $curent;
-                for ($i = 0; $i < $cate; $i++) {
-                    if ($directie == 0) {
-                        if ($curent['lat'] < $atractii[$i]['lat'] && $atractii[$i]['lat'] < $finish[$i]['lat'] && $this->distance($curent['lat'], $curent['lon'], $atractii[$i]['lat'], $atractii[$i]['lon']) < $dist) {
-                            $dist = $this->distance($curent['lat'], $curent['lon'], $atractii[$i]['lat'], $atractii[$i]['lon']);
-                            $gasite = true;
-                            $candidat = $atractii[$i];
-                        }
-                    } else {
-                        if ($curent['lon'] < $atractii[$i]['lon'] && $atractii[$i]['lon'] < $finish[$i]['lon'] && $this->distance($curent['lat'], $curent['lon'], $atractii[$i]['lat'], $atractii[$i]['lon']) < $dist) {
-                            $dist = $this->distance($curent['lat'], $curent['lon'], $atractii[$i]['lat'], $atractii[$i]['lon']);
-                            $gasite = true;
-                            $candidat = $atractii[$i];
-                        }
+            $bestRoute = [$start];
+            $totalPower = 80;
+            $totalTime = $max_time;
+            $attractions = $this->getTouristAttractions($start, $finish);
+            $visited = [];
+
+            // While there are still attractions to visit and we still have enough power to get from the last
+            // attraction to the destination
+            do {
+                $lastNode = end($bestRoute);
+                $minDist = INF;
+                $nextNode = -1;
+                // Get the closest attraction that has not been visited
+                foreach ($attractions as $key => $attraction) {
+                    $dist = $this->distance($lastNode['lat'], $lastNode['lon'], $attraction['lat'], $attraction['lon']);
+                    if ($dist < $minDist && !isset($visited[$key])) {
+                        $minDist = $dist;
+                        $nextNode = $key;
                     }
                 }
-                $rezultat = $this->getRoute($candidat, $finish);
-                if ($rezultat['time'] + $raspuns['time'] > $max_time) {
-                    $gasite = false;
-                    $raspuns['time'] += $rezultat['time'];
+                // Add the attraction to the list
+                $bestRoute[] = $attractions[$nextNode];
+                // Decrease the total power by the power consumed to reach the attraction
+                $totalPower -= $minDist * $consumption;
+                $totalTime -= $minDist / $avgSpeed;
+
+                // Mark the new attraction as visited
+                $visited[$nextNode] = true;
+
+                $dist = $this->distance($lastNode['lat'], $lastNode['lon'], $finish['lat'], $finish['lon']);
+                // If we visited all the attractions, we don't have enough power left to reach the destination,
+                // or we aren't reaching our destination in time, break
+                if (count($visited) == count($attractions) || $totalPower - $dist * $consumption <= 0 ||
+                    $totalTime - $dist / $avgSpeed <= 0) {
+                    break;
                 }
-                array_push($raspuns['drum'], $candidat);
-                $curent = $candidat;
+
+            } while (true);
+
+            $totalPower -= $dist * $consumption;
+            $totalTime -= $dist / $avgSpeed;
+
+            // If we stopped because we didn't have enough power remaining to reach the destination, or we didn't
+            // have enough time left, remove the last attraction
+            if ($totalPower <= 0 || $totalTime < 0) {
+                array_pop($bestRoute);
             }
-            return $raspuns;
+
+            $bestRoute[] = $finish;
+
+            // If we still have time, choose a new stop to see even more things
+            if ($totalTime > 0) {
+                $chosen_station = $this->chooseStation($start, $finish, $visitedStations);
+                // If there are no charging stations left, return the current best route
+                if (!$chosen_station) {
+                    return $bestRoute;
+                }
+
+                // Compute the max distance for left route and right route
+                $leftDist = $this->distance($start['lat'], $start['lon'], $chosen_station['lat'], $chosen_station['lon']);
+                $rightDist = $this->distance($chosen_station['lat'], $chosen_station['lon'], $finish['lat'], $finish['lon']);
+
+                // Account for the time spent in the charging station
+                $max_time -= $leftDist * $consumption / 40;
+
+                $leftTime = $leftDist / ($leftDist + $rightDist) * $max_time;
+                $rightTime = $max_time - $leftTime;
+
+                // If there was no left route found, return the best route
+                $saveStations = $visitedStations;
+                $leftRoute = $this->computeRoute($start, $chosen_station, $leftTime, $visitedStations);
+                if (!$leftRoute) {
+                    $visitedStations = $saveStations;
+                    return $bestRoute;
+                }
+
+                // Same for right route
+                $rightRoute = $this->computeRoute($chosen_station, $finish, $rightTime, $visitedStations);
+                if (!$rightRoute) {
+                    $visitedStations = $saveStations;
+                    return $bestRoute;
+                }
+
+                unset($rightRoute[0]);
+
+                $newRoute = array_merge($leftRoute, $rightRoute);
+
+                if (count($newRoute) - 1 > $bestRoute) {
+                    $bestRoute = $newRoute;
+                }
+            }
+
+            // If there is no time left, return the best route
+            return $bestRoute;
         }
     }
 
     public function main(Request $request)
     {
         $this->chargingStations = $this->getChargingStations();
+        unset($this->chargingStations[3]);
+        $start = $request->start;
+        $finish = $request->finish;
+        $time = $request->duration;
+
+//        $start = [
+//            'lat' => 44.439663,
+//            'lon' => 26.096306
+//        ];
+//
+//        $finish = [
+//            'lat' => 44.171886,
+//            'lon' => 28.635885
+//        ];
+//
+//        $time = 15;
+
+        $route = $this->computeRoute($start, $finish, $time);
+
+        return JsonResponse::create([
+            'route' => $route
+        ]);
     }
 }
