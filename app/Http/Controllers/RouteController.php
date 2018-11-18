@@ -204,6 +204,7 @@ class RouteController extends Controller
             $finishDist = $this->distance($chosen_station['lat'], $chosen_station['lon'], $finish['lat'], $finish['lon']);
             $leftTime = $startDist / ($startDist + $finishDist) * $max_time;
             $rightTime = $max_time - $leftTime;
+            $saveTime = $this->elapsed_time;
 
             // If there was no left route found, return the best route
             $saveStations = $visitedStations;
@@ -212,13 +213,17 @@ class RouteController extends Controller
                 $visitedStations = $saveStations;
                 return [];
             }
+            $this->elapsed_time = end($leftRoute)['elapsed_time'];
 
             // Same for right route
             $rightRoute = $this->computeRoute($chosen_station, $finish, $rightTime, $visitedStations);
             if (!$rightRoute) {
+                $this->elapsed_time = $saveTime;
                 $visitedStations = $saveStations;
                 return [];
             }
+            $this->elapsed_time = end($rightRoute)['elapsed_time'];
+            unset($rightRoute[0]);
 
             // Otherwise, return the new route as it is the best
             return array_merge($leftRoute, $rightRoute);
@@ -355,7 +360,7 @@ class RouteController extends Controller
             for($i = 0; $i < count($chargingStations) && $gasita == 0; $i++)
                 for($j = $i + 1; $j < count($chargingStations) && $gasita == 0; $j++)
                 {
-                    if($this->distance($chargingStations[$i]['lat'], $chargingStations[$i]['lon'], $chargingStations[$j]['lat'], $chargingStations[$j]['lon']) < 25)
+                    if($this->distance($chargingStations[$i]['lat'], $chargingStations[$i]['lon'], $chargingStations[$j]['lat'], $chargingStations[$j]['lon']) < 105)
                     {
                         array_splice($chargingStations, $i, 1);
                         $gasita = 1;
@@ -363,7 +368,7 @@ class RouteController extends Controller
                 }
         }
         $this->chargingStations = $chargingStations;
-        $this->averageStop = $request->tourism_stop;
+        $this->averageStop = $request->tourism_stop / 60;
         $start = array();
         $start['lat'] = $request->latS;
         $start['lon'] = $request->lonS;
@@ -373,12 +378,13 @@ class RouteController extends Controller
         $time = $request->duration;
 
         $route = $this->computeRoute($start, $finish, $time);
+//        dd($route);
         $rezultat = [];
         for($i = 0; $i < count($route) - 1; $i++)
         {
             $a = $route[$i];
             $b = $route[$i + 1];
-            sleep(0.1);
+            sleep(0.01);
             $rezultat = array_merge($rezultat, $this->getRoute($a, $b)['coordinates']);
         }
 
