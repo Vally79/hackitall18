@@ -364,12 +364,13 @@
         const lat = urlParams.get('lat');
         const lon = urlParams.get('lon');
         const duration = urlParams.get('duration');
-        if(latS !== null && lonS !== null && lat !== null && lon !== null && duration !== null) { //just load site here
+        const country = urlParams.get('country');
+        if(latS !== null && lonS !== null && lat !== null && lon !== null && duration !== null && country != null) { //just load site here
             // alert("Fac ceva");
             searchHandler.options.sourceLocationCoordinates =  {lat:latS, lng:lonS};
             searchHandler.options.destinationLocationCoordinates =  {lat:lat, lng:lon};
             $('#durationInput').val(duration);
-            ia_harta();
+            ia_harta(tara = country);
             // return; //optional, depinde cum vrem sa o gandim
         }
 
@@ -386,14 +387,11 @@
             };
             const urlul = '?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration + '&country=' + data.country;
             history.pushState(null, '', urlul);
-            ia_harta();
+            ia_harta(tara);
         });
 
-        function ia_harta()
+        function ia_harta(tara)
         {
-            var tara = $('#sourceLocationTextInput').val().split(',');
-            tara = tara[tara.length - 1];
-            tara = tara.substr(1);
             var data = {
                 start: searchHandler.options.sourceLocationCoordinates,
                 finish: searchHandler.options.destinationLocationCoordinates,
@@ -452,7 +450,9 @@
                             L.marker([waypoints[i].lat, waypoints[i].lon], {icon: electricStationIcon}).on('click', function(e1) {
                                 popup
                                     .setLatLng(e1.latlng)
-                                    .setContent(waypoints[i].name)
+                                    .setContent(waypoints[i].name + '&nbsp;&nbsp;<i class="' + baterry_class + '"></i>'+
+                                    power.toFixed(2) + '&nbsp;&nbsp;<i class="' +
+                                    time_class + '"></i>' + time.toFixed(2))
                                     .openOn(map);
                             }).addTo(map);
                         }
