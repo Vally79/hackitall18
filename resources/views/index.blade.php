@@ -410,7 +410,6 @@
                     for (var i = 1 ; i < response.length ; i++) {
                         latlngs.push([response[i].lat, response[i].lon]);
                     }
-                    console.log(latlngs);
                     var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
                     // zoom the map to the polyline
                     map.fitBounds(polyline.getBounds());
@@ -461,8 +460,6 @@
                                     .openOn(map);
                             }).addTo(map);
                         }
-
-                        console.log(waypoints[i]);
                     }
 
                     //stop loading icon
