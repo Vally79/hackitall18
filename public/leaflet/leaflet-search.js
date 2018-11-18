@@ -102,7 +102,8 @@ L.Control.Search = L.Control.extend({
         sourceLocationText: null,
         destinationLocationCoordinates: {lat:null, lng:null},
         destinationLocationText: null,
-        sourceOrDestinationOption: 'source' //'source' / 'destination'
+        sourceOrDestinationOption: 'source', //'source' / 'destination',
+        _country: ''
 	},
 
 	_getPath: function(obj, prop) {
@@ -864,6 +865,7 @@ L.Control.Search = L.Control.extend({
                         this.options.sourceLocationCoordinates = loc;
                         this.options.sourceLocationText = this._input.value;
                         document.getElementById('sourceLocationTextInputHidden').value = this._input.value;
+                        this.options._country = this._input.value;
                         this.options.sourceOrDestinationOption = 'destination';
                     }
                     else if (this.options.sourceOrDestinationOption === 'destination') {

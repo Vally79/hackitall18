@@ -575,6 +575,7 @@
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
                     subdomains: ['a', 'b', 'c']
                 }).addTo( map );
+
             }
             //pune markerul
             let pickedIcon = '';
@@ -627,7 +628,7 @@
 
         $('#buton').on('click', function (e) {
             e.preventDefault();
-            var tara = $('#sourceLocationTextInputHidden').val().split(',');
+            var tara = searchHandler.options._country.split(',');
             console.log(geocoded_country);
             console.log(tara.length);
             if (tara.length == 1) //inseamna ca a selectat prin click
