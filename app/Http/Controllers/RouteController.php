@@ -18,7 +18,7 @@ class RouteController extends Controller
      * @param string $country
      * @return array|bool
      */
-    public function getChargingStations($country = 'romania')
+    public function getChargingStations($country = 'japan')
     {
         $client = new Client();
         $url = "https://nominatim.openstreetmap.org/search.php?q=charging+stations+in+$country&amenity=charging_station&format=json&limit=1000";
@@ -119,7 +119,7 @@ class RouteController extends Controller
         }
 
         $client = new Client();
-        $url = "https://nominatim.openstreetmap.org/search.php?q=attractions+in+romania&highway=ways" .
+        $url = "https://nominatim.openstreetmap.org/search.php?q=attractions+in+japan&highway=ways" .
             "&viewbox=$leftMargin,$topMargin,$rightMargin,$bottomMargin&format=json&limit=100";
         $response = $client->get($url);
 
@@ -349,6 +349,7 @@ class RouteController extends Controller
         $time = $request->duration;
 
         $route = $this->computeRoute($start, $finish, $time);
+//        dd($route);
         $rezultat = [];
         for($i = 0; $i < count($route) - 1; $i++)
         {
