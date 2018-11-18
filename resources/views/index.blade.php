@@ -661,11 +661,7 @@
             //start loading icon
             $('#loadingIcon').toggleClass('loading');
 
-            // STERGE TOATE datele pt a reinitializa
-            searchHandler.options.sourceLocationCoordinates = {lat:null, lng:null};
-            searchHandler.options.sourceLocationText = null;
-            searchHandler.options.destinationLocationCoordinates = {lat:null, lng:null};
-            searchHandler.options.destinationLocationText = null;
+            click_count = 0;
             searchHandler.options.sourceOrDestinationOption = 'source';
             sourceOrDestination = 'source';
             //sterge si toate marcherele si tot
