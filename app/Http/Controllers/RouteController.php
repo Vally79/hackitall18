@@ -364,6 +364,7 @@ class RouteController extends Controller
         {
             $a = $route[$i];
             $b = $route[$i + 1];
+            sleep(0.01);
             $rezultat = array_merge($rezultat, $this->getRoute($a, $b)['coordinates']);
         }
 
