@@ -230,7 +230,7 @@
                     <input id= "durationInput" name="duration" placeholder="Duration of the trip (hours)" type="text" />
                 </div>
                 <div class="s-3">
-                    <input id= "maximumStayInput" name="maximumStay" placeholder="Maximum stay (hours)" type="text" />
+                    <input id= "maximumStayInput" name="tourism_stay    " placeholder="Maximum stay (hours)" type="text" />
                 </div>
                 <div class="s-2">
                     <button id="buton" class="btn btn-primary">Search for a plan</button>
