@@ -65,6 +65,10 @@
             font-size: 1.5rem;
         }
 
+        /* Override too complex styles that we don't need, specifically top sticky navbar */
+        header {
+            position: fixed;
+        }
     </style>
     <style>
         /* Absolute Center Spinner */
@@ -211,7 +215,7 @@
     </nav>
 </header>
 <section>
-    <div id="loadingIcon">Loading&#8230;</div>
+    <div id="loadingIcon"></div>
     <!-- DETAILS FORM -->
     <div id="roadTripDetails" class="s-12 m-12 l-12">
         <h3>Your road trip details</h3>
@@ -233,17 +237,6 @@
     <!-- MAP -->
     <div id="map"></div>
 </section>
-<!-- FOOTER -->
-<footer>
-    <div class="line">
-        <div class="s-12 l-6">
-            <p>Copyright 2018, NoClue team</p>
-        </div>
-        <div class="s-12 l-6">
-            <a class="right" href="http://www.myresponsee.com" title="Responsee - lightweight responsive framework">Design and coding<br> by NoClue Team</a>
-        </div>
-    </div>
-</footer>
 <script type="text/javascript" src="{{ URL::asset('js/responsee.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('owl-carousel/owl.carousel.js') }}"></script>
 <script src="{{ URL::asset('leaflet/leaflet-search.js') }}"></script>
