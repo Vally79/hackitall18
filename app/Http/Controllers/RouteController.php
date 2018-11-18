@@ -17,7 +17,7 @@ class RouteController extends Controller
      * @param string $country
      * @return array|bool
      */
-    public function getChargingStations($country = 'japan')
+    public function getChargingStations($country = 'romania')
     {
         $client = new Client();
         $url = "https://nominatim.openstreetmap.org/search.php?q=charging+stations+in+$country&amenity=charging_station&format=json&limit=1000";
@@ -118,7 +118,7 @@ class RouteController extends Controller
         }
 
         $client = new Client();
-        $url = "https://nominatim.openstreetmap.org/search.php?q=attractions+in+japan&highway=ways" .
+        $url = "https://nominatim.openstreetmap.org/search.php?q=attractions+in+romania&highway=ways" .
             "&viewbox=$leftMargin,$topMargin,$rightMargin,$bottomMargin&format=json&limit=100";
         $response = $client->get($url);
 
@@ -133,7 +133,8 @@ class RouteController extends Controller
         foreach ($items as $item) {
             $coordinates[] = [
                 'lat' => $item->lat,
-                'lon' => $item->lon
+                'lon' => $item->lon,
+                'name' => $item->display_name
             ];
         }
 
@@ -346,7 +347,6 @@ class RouteController extends Controller
             sleep(0.01);
             $rezultat = array_merge($rezultat, $this->getRoute($a, $b)['coordinates']);
         }
-
 
 
         return JsonResponse::create([

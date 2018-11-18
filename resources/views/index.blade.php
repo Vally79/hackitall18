@@ -264,8 +264,10 @@
                         iconSize: [32, 32], // size of the icon
                     });
 
-                    for(var i = 1; i < waypoints.length; i++)
+                    for(var i = 1; i < waypoints.length; i++) {
                         L.marker([waypoints[i].lat, waypoints[i].lon]).addTo(map);
+                        console.log(waypoints[i].name);
+                    }
                 }
             });
         });
