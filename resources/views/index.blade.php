@@ -190,6 +190,15 @@
                 transform: rotate(360deg);
             }
         }
+
+        .customform .s-3 input, .customform .s-2 button#buton, .customform .s-2 input {
+            min-height: 60px; !important;
+        }
+
+        #roadTripDetails {
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="size-1140">
@@ -200,8 +209,8 @@
 <!-- TOP NAV WITH LOGO -->
 <header>
     <nav>
-        <div class="line">
-            <div class="s-12 l-2">
+        <div class="line" style="height:70px">
+            <div class="text-center, s-12 l-2">
                 <p class="logo"><strong>FUN</strong>&nbsp;TRAVELLING</p>
             </div>
         </div>
@@ -233,26 +242,16 @@
     <!-- MAP -->
     <div id="map"></div>
 
-    <div class="s-2" id="fb-root"></div>
-    <script>(function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
-
-    <!-- Your share button code -->
-    <div class="fb-share-button"
-         data-href= window.location.href
-         data-layout="button_count">
-    </div>
+    <iframe id="face" width="89" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
 </section>
 <script type="text/javascript" src="{{ URL::asset('js/responsee.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('owl-carousel/owl.carousel.js') }}"></script>
 <script src="{{ URL::asset('leaflet/leaflet-search.js') }}"></script>
 <script type="text/javascript">
     jQuery(document).ready(function($) {
+        let sUrl = window.location.href;
+        let url = "https://www.facebook.com/plugins/share_button.php?href="+encodeURIComponent(sUrl)+"&layout=button_count&size=small&mobile_iframe=true&width=89&height=20&appId";
+        document.getElementById('face').setAttribute('src', url);
         var theme_slider = $("#owl-demo");
         var owl = $('#owl-demo');
         owl.owlCarousel({
@@ -310,16 +309,19 @@
 
         map.on('click', function(e) {
             //pune markerul
+            let pickedIcon = '';
             if (sourceOrDestination === 'source') {
-                L.marker([e.latlng.lat, e.latlng.lng], {icon: startIcon}).addTo(map);
+                pickedIcon = startIcon;
                 sourceOrDestination = 'destination';
                 searchHandler.options.sourceLocationCoordinates = {lat:e.latlng.lat, lng:e.latlng.lng}
             }
             else {
-                L.marker([e.latlng.lat, e.latlng.lng], {icon: finishIcon}).addTo(map);
+                pickedIcon = finishIcon;
                 sourceOrDestination = 'source';
                 searchHandler.options.destinationLocationCoordinates = {lat:e.latlng.lat, lng:e.latlng.lng}
             }
+            L.marker([e.latlng.lat, e.latlng.lng], {icon: pickedIcon}).addTo(map);
+            map.setView([e.latlng.lat, e.latlng.lng], 10);
             searchHandler.options.sourceOrDestinationOption = sourceOrDestination;
         });
 
@@ -371,6 +373,10 @@
 
         function ia_harta(tara)
         {
+            let sUrl = window.location.href;
+            let url = "https://www.facebook.com/plugins/share_button.php?href="+encodeURIComponent(sUrl)+"&layout=button_count&size=small&mobile_iframe=true&width=89&height=20&appId";
+            document.getElementById('face').setAttribute('src', url);
+            //alert("url : "+url);
             var data = {
                 start: searchHandler.options.sourceLocationCoordinates,
                 finish: searchHandler.options.destinationLocationCoordinates,
