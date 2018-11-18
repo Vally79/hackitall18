@@ -297,7 +297,7 @@
             <label for="duration">Trip duration:</label>
             <input type="text" id="durationInput" name="duration" placeholder="Duration of the trip (hours)">
             <label for="tourism_stop">Average stay / attraction:</label>
-            <input type="text" id="maximumStayInput" name="tourism_stop" placeholder="Average stay (hours)">
+            <input type="text" id="maximumStayInput" name="tourism_stop" placeholder="Average stay (minutes)">
             <button id="buton" class="btn btn-primary" type="submit">Submit</button>
         </form>
     </div>
@@ -649,7 +649,7 @@
                 searchHandler.options.destinationLocationCoordinates = {lat:e.latlng.lat, lng:e.latlng.lng}
             }
             L.marker([e.latlng.lat, e.latlng.lng], {icon: pickedIcon}).addTo(map);
-            map.setView([e.latlng.lat, e.latlng.lng], 10);
+            map.setView([e.latlng.lat, e.latlng.lng], 8);
             searchHandler.options.sourceOrDestinationOption = sourceOrDestination;
 
             geocode.reverse(e.latlng);
