@@ -323,10 +323,7 @@
         var popup = L.popup();
 
         function onMapClick(e) {
-            popup
-                .setLatLng(e.latlng)
-                .setContent("You clicked the map at " + e.latlng.toString())
-                .openOn(map);
+
         }
 
         map.on('click', onMapClick);
@@ -381,8 +378,13 @@
                         iconSize: [32, 32], // size of the icon
                     });
 
-                    for(var i = 1; i < waypoints.length; i++) {
-                        L.marker([waypoints[i].lat, waypoints[i].lon]).addTo(map);
+                    for(let i = 1; i < waypoints.length; i++) {
+                        L.marker([waypoints[i].lat, waypoints[i].lon]).on('click', function(e1) {
+                            popup
+                                .setLatLng(e1.latlng)
+                                .setContent(waypoints[i].name)
+                                .openOn(map);
+                        }).addTo(map);
                         console.log(waypoints[i].name);
                     }
 
@@ -391,6 +393,7 @@
                 }
             });
         });
+
 
         //L.marker([46, 26]).addTo(map);
         //map.setView([46, 26], 10);
