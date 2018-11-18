@@ -372,19 +372,30 @@
                     // zoom the map to the polyline
                     map.fitBounds(polyline.getBounds());
 
-                    var electricStation = L.icon({
+                    var electricStationIcon = L.icon({
                         iconUrl: 'electric-station.png',
 
                         iconSize: [32, 32], // size of the icon
                     });
 
                     for(let i = 1; i < waypoints.length; i++) {
-                        L.marker([waypoints[i].lat, waypoints[i].lon]).on('click', function(e1) {
-                            popup
-                                .setLatLng(e1.latlng)
-                                .setContent(waypoints[i].name)
-                                .openOn(map);
-                        }).addTo(map);
+                        if (waypoints[i].charging === 1) { //   statie electrica, ii pun si icon separat
+                            L.marker([waypoints[i].lat, waypoints[i].lon], {icon: electricStationIcon}).on('click', function(e1) {
+                                popup
+                                    .setLatLng(e1.latlng)
+                                    .setContent(waypoints[i].name)
+                                    .openOn(map);
+                            }).addTo(map);
+                        }
+                        else { //waypoint obisnuit
+                            L.marker([waypoints[i].lat, waypoints[i].lon]).on('click', function(e1) {
+                                popup
+                                    .setLatLng(e1.latlng)
+                                    .setContent(waypoints[i].name)
+                                    .openOn(map);
+                            }).addTo(map);
+                        }
+
                         console.log(waypoints[i].name);
                     }
 
