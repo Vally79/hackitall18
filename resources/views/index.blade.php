@@ -359,8 +359,12 @@
         const lon = urlParams.get('lon');
         const duration = urlParams.get('duration');
         if(latS !== null && lonS !== null && lat !== null && lon !== null && duration !== null) { //just load site here
-            console.log('here');
-            return; //optional, depinde cum vrem sa o gandim
+            // alert("Fac ceva");
+            searchHandler.options.sourceLocationCoordinates =  {lat:latS, lng:lonS};
+            searchHandler.options.destinationLocationCoordinates =  {lat:lat, lng:lon};
+            $('#durationInput').val(duration);
+            ia_harta();
+            // return; //optional, depinde cum vrem sa o gandim
         }
 
         $('#buton').on('click', function (e) {
@@ -370,7 +374,19 @@
                 finish: searchHandler.options.destinationLocationCoordinates,
                 duration: $('#durationInput').val(),
             };
+            const urlul = '?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration;
+            history.pushState(null, '', urlul);
+            ia_harta();
+        });
 
+        function ia_harta()
+        {
+            var data = {
+                start: searchHandler.options.sourceLocationCoordinates,
+                finish: searchHandler.options.destinationLocationCoordinates,
+                duration: $('#durationInput').val(),
+            };
+            console.log(data);
             //start loading icon
             $('#loadingIcon').toggleClass('loading');
             $.ajax({
@@ -446,8 +462,8 @@
                     $('#loadingIcon').toggleClass('loading');
                 }
             });
-        });
-        
+        }
+
     });
 </script>
 </body>
