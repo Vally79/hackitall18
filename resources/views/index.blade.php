@@ -339,14 +339,6 @@
         --}}
 
         var popup = L.popup();
-
-        function onMapClick(e) {
-
-        }
-
-        map.on('click', onMapClick);
-
-        a = 0;
         var searchHandler;
         map.addControl( searchHandler = new L.Control.Search({
             url: 'http://nominatim.openstreetmap.org/search?format=json&q={s}',
@@ -360,6 +352,16 @@
             zoom: 10
         }) );
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const latS = urlParams.get('latS');
+        const lonS = urlParams.get('lonS');
+        const lat = urlParams.get('lat');
+        const lon = urlParams.get('lon');
+        const duration = urlParams.get('duration');
+        if(latS !== null && lonS !== null && lat !== null && lon !== null && duration !== null) { //just load site here
+            console.log('here');
+            return; //optional, depinde cum vrem sa o gandim
+        }
 
         $('#buton').on('click', function (e) {
             e.preventDefault();
@@ -423,9 +425,7 @@
             });
         });
 
-
-        //L.marker([46, 26]).addTo(map);
-        //map.setView([46, 26], 10);
+        
     });
 </script>
 </body>
