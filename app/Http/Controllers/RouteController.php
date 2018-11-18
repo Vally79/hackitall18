@@ -56,7 +56,6 @@ class RouteController extends Controller
      */
     public function getRoute($startPoint, $endPoint)
     {
-
         $client = new Client();
         $url = "https://api.openrouteservice.org/directions?api_key=" . env('ORS_KEY') .
             "&coordinates=" . $startPoint['lon'] . "," . $startPoint['lat'] . "|" . $endPoint['lon'] . "," . $endPoint['lat'] .
@@ -364,7 +363,7 @@ class RouteController extends Controller
         {
             $a = $route[$i];
             $b = $route[$i + 1];
-            sleep(0.01);
+            sleep(0.1);
             $rezultat = array_merge($rezultat, $this->getRoute($a, $b)['coordinates']);
         }
 
