@@ -42,12 +42,8 @@
             top: 0px;
         }
 
-        #first-block {
-            margin-top: 0px;
-        }
-
         #roadTripDetails {
-            margin-top: 90px;
+            margin-top: 70px;
             margin-left: 50px;
             width: 90%;
         }
@@ -68,6 +64,10 @@
         /* Override too complex styles that we don't need, specifically top sticky navbar */
         header {
             position: fixed;
+        }
+
+        nav > div {
+            height: 60px;
         }
     </style>
     <style>
@@ -204,13 +204,6 @@
             <div class="s-12 l-2">
                 <p class="logo"><strong>FUN</strong>&nbsp;TRAVELLING</p>
             </div>
-            <div class="top-nav s-12 l-10">
-                <p class="nav-text">Custom menu text</p>
-                <ul class="right">
-                    <li class="active-item"><a href="#carousel">Home</a></li>
-                    <li><a href="#about-us">About Us</a></li>
-                </ul>
-            </div>
         </div>
     </nav>
 </header>
@@ -220,19 +213,33 @@
     <div id="roadTripDetails" class="s-12 m-12 l-12">
         <h3>Your road trip details</h3>
         <form class="customform" action="">
-            <div class="s-3">
-                <input name="source" id="sourceLocationTextInput" placeholder="Start (pick from map)" type="text" disabled />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="s-3">
+                            <input name="source" id="sourceLocationTextInput" placeholder="Start (pick from map)" type="text" disabled />
+                        </div>
+                        <div class="s-2">
+                            <input id= "durationInput" name="duration" placeholder="Duration of the trip (hours)" type="text" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="s-3">
+                            <input name="destination" id="destinationLocationTextInput" placeholder="Destination (pick from map)" type="text" disabled />
+                        </div>
+                        <div class="s-2">
+                            <button id="buton" class="btn btn-primary">Search for a plan</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="s-2">
+                            <input id= "maximumStayInput" name="maximumStay" placeholder="Maximum stay (hours)" type="text" />
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="s-3">
-                <input name="destination" id="destinationLocationTextInput" placeholder="Destination (pick from map)" type="text" disabled />
-            </div>
-            <div class="s-2">
-                <input id= "durationInput" name="duration" placeholder="Duration of the trip (hours)" title="Your name" type="text" />
-            </div>
-            <div class="s-2">
-                <button id="buton" class="btn btn-primary">Search for a plan</button>
-            </div>
-
         </form>
     </div>
 
