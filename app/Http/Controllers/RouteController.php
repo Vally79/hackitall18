@@ -222,6 +222,7 @@ class RouteController extends Controller
             // Otherwise, return the new route as it is the best
             return array_merge($leftRoute, $rightRoute);
         } else {
+//            dd($this->elapsed_time);
             $bestRoute = [array_merge($start, ['power_left' => 100, 'elapsed_time' => $this->elapsed_time])];
             $totalPower = 80;
             $totalTime = $max_time;
@@ -289,8 +290,6 @@ class RouteController extends Controller
                 'power_left' => end($bestRoute)['power_left'] - $dist * $consumption
             ]);
 
-            $this->elapsed_time = end($bestRoute)['elapsed_time'];
-
             // If we still have time, choose a new stop to see even more things
             if ($totalTime > 0) {
                 $chosen_station = $this->chooseStation($start, $finish, $visitedStations);
@@ -330,6 +329,7 @@ class RouteController extends Controller
                 $newRoute = array_merge($startRoute, $finishRoute);
 
                 if (count($newRoute) - 1 > count($bestRoute)) {
+                    $this->elapsed_time = end($newRoute)['elapsed_time'];
                     $bestRoute = $newRoute;
                 }
             }
