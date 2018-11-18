@@ -643,11 +643,11 @@
                 finish: searchHandler.options.destinationLocationCoordinates,
                 duration: $('#durationInput').val(),
                 country: tara,
-                tourism_stop: $('#maximumStayInput').val() ? $('#maximumStayInput').val() : 0
+                tourism_stop: !$('#maximumStayInput').val() ? 0 : $('#maximumStayInput').val()
             };
             const urlul = '?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration + '&country=' + data.country + '&tourism_stop=' + data.tourism_stop;
             history.pushState(null, '', urlul);
-            ia_harta(tara);
+            ia_harta(tara, tourism = data.tourism_stop);
         });
 
         function ia_harta(tara, tourism)
