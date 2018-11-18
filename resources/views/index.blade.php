@@ -448,9 +448,9 @@
                             L.marker([waypoints[i].lat, waypoints[i].lon]).on('click', function(e1) {
                                 popup
                                     .setLatLng(e1.latlng)
-                                    .setContent(waypoints[i].name + ' <i class="' + baterry_class + '"></i>'+
-                                        parseFloat(Math.round(power * 100) / 100).toFixed(2) + ' <i class="fa' +
-                                        time_class + '"></i>' + parseFloat(Math.round(time * 100) / 100).toFixed(2))
+                                    .setContent(waypoints[i].name + '&nbsp;&nbsp;<i class="' + baterry_class + '"></i>'+
+                                        power.toFixed(2) + '&nbsp;&nbsp;<i class="' +
+                                        time_class + '"></i>' + time.toFixed(2))
                                     .openOn(map);
                             }).addTo(map);
                         }
