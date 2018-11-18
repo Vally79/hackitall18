@@ -211,34 +211,20 @@
     <div id="loadingIcon"></div>
     <!-- DETAILS FORM -->
     <div id="roadTripDetails" class="s-12 m-12 l-12">
-        <h3>Your road trip details</h3>
         <form class="customform" action="">
             <div class="row">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="s-3">
-                            <input name="source" id="sourceLocationTextInput" placeholder="Start (pick from map)" type="text" disabled />
-                        </div>
-                        <div class="s-2">
-                            <input id= "durationInput" name="duration" placeholder="Duration of the trip (hours)" type="text" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="s-3">
-                            <input name="destination" id="destinationLocationTextInput" placeholder="Destination (pick from map)" type="text" disabled />
-                        </div>
-                        <div class="s-2">
-                            <button id="buton" class="btn btn-primary">Search for a plan</button>
-                        </div>
-                    </div>
+                <div class="s-3">
+                    <input id= "durationInput" name="duration" placeholder="Duration of the trip (hours)" type="text" />
                 </div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="s-2">
-                            <input id= "maximumStayInput" name="maximumStay" placeholder="Maximum stay (hours)" type="text" />
-                        </div>
-                    </div>
+                <div class="s-3">
+                    <input id= "maximumStayInput" name="maximumStay" placeholder="Maximum stay (hours)" type="text" />
                 </div>
+                <div class="s-2">
+                    <button id="buton" class="btn btn-primary">Search for a plan</button>
+                </div>
+            </div>
+            <div class="row">
+                <h6 id="sourceLocationTextInput"></h6> TO <h6 id="destinationLocationTextInput"></h6>
             </div>
         </form>
     </div>
@@ -305,45 +291,37 @@
             center: [20.0, 5.0],
             minZoom: 2,
             zoom: 2
-        })
+        });
 
         L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             subdomains: ['a', 'b', 'c']
-        }).addTo( map )
+        }).addTo( map );
 
-        /*
-        var myURL = jQuery( 'script[src$="leaf-demo.js"]' ).attr( 'src' ).replace( 'leaf-demo.js', '' )
-
-        var myIcon = L.icon({
-            iconUrl: myURL + 'images/pin24.png',
-            iconRetinaUrl: myURL + 'images/pin48.png',
-            iconSize: [29, 24],
-            iconAnchor: [9, 21],
-            popupAnchor: [0, -14]
-        })
-
-        for ( var i=0; i < markers.length; ++i )
-        {
-            L.marker( [markers[i].lat, markers[i].lng], {icon: myIcon} )
-                .bindPopup( '<a href="' + markers[i].url + '" target="_blank">' + markers[i].name + '</a>' )
-                .addTo( map );
-        }*/
-
-        {{--
-        var greenIcon = L.icon({
-            iconUrl: '{{ URL::asset('img/leaf-green.png') }}',
-            shadowUrl: '{{ URL::asset('img/leaf-shadow.png') }}',
-
-            iconSize:     [38, 95], // size of the icon
-            shadowSize:   [50, 64], // size of the shadow
-            iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-            shadowAnchor: [4, 62],  // the same for the shadow
-            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        var sourceOrDestination = 'source';
+        var startIcon = L.icon({
+            iconUrl: 'start_black.png',
+            iconSize: [32, 32], // size of the icon
+        });
+        var finishIcon = L.icon({
+            iconUrl: 'end.png',
+            iconSize: [32, 32], // size of the icon
         });
 
-        L.marker([51.5, -0.09], {icon: greenIcon}).addTo(map);
-        --}}
+        map.on('click', function(e) {
+            //pune markerul
+            if (sourceOrDestination === 'source') {
+                L.marker([e.latlng.lat, e.latlng.lng], {icon: startIcon}).addTo(map);
+                sourceOrDestination = 'destination';
+                searchHandler.options.sourceLocationCoordinates = {lat:e.latlng.lat, lng:e.latlng.lng}
+            }
+            else {
+                L.marker([e.latlng.lat, e.latlng.lng], {icon: finishIcon}).addTo(map);
+                sourceOrDestination = 'source';
+                searchHandler.options.destinationLocationCoordinates = {lat:e.latlng.lat, lng:e.latlng.lng}
+            }
+            searchHandler.options.sourceOrDestinationOption = sourceOrDestination;
+        });
 
         var popup = L.popup();
         var searchHandler;
@@ -401,6 +379,25 @@
             };
             //start loading icon
             $('#loadingIcon').toggleClass('loading');
+
+            // STERGE TOATE datele pt a reinitializa
+            searchHandler.options.sourceLocationCoordinates = {lat:null, lng:null};
+            searchHandler.options.sourceLocationText = null;
+            searchHandler.options.destinationLocationCoordinates = {lat:null, lng:null};
+            searchHandler.options.destinationLocationText = null;
+            searchHandler.options.sourceOrDestinationOption = 'source';
+            sourceOrDestination = 'source';
+            //sterge si toate marcherele si tot
+            map.eachLayer(function (layer) {
+                map.removeLayer(layer);
+            });
+            //readuga primul strat
+            L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                subdomains: ['a', 'b', 'c']
+            }).addTo( map );
+
+            //continua cu request-ul
             $.ajax({
                 url: 'getRoute?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration + '&country=' + data.country,
                 method: 'get',

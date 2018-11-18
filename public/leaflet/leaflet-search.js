@@ -863,13 +863,13 @@ L.Control.Search = L.Control.extend({
                     if (this.options.sourceOrDestinationOption === 'source') {
                         this.options.sourceLocationCoordinates = loc;
                         this.options.sourceLocationText = this._input.value;
-                        document.getElementById('sourceLocationTextInput').value = this._input.value;
+                        document.getElementById('sourceLocationTextInput').innerText = this._input.value;
                         this.options.sourceOrDestinationOption = 'destination';
                     }
                     else if (this.options.sourceOrDestinationOption === 'destination') {
                         this.options.destinationLocationCoordinates = loc;
                         this.options.destinationLocationText = this._input.value;
-                        document.getElementById('destinationLocationTextInput').value = this._input.value;
+                        document.getElementById('destinationLocationTextInput').innerText = this._input.value;
                         this.options.sourceOrDestinationOption = 'source';
                     }
 
