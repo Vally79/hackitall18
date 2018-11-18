@@ -13,7 +13,7 @@
     <!-- CUSTOM STYLE -->
     <link rel="stylesheet" href="{{ URL::asset('css/template-style.css') }}">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ URL::asset('leaflet/leaflet.css') }}" />
     <script src="{{ URL::asset('leaflet/leaflet.js') }}"></script>
 
@@ -399,6 +399,27 @@
                     });
 
                     for(let i = 0; i < waypoints.length; i++) {
+                        var power = waypoints[i].power_left;
+                        var baterry_class = '';
+                        if (power > 0.75)
+                            baterry_class = 'fa fa-battery-full';
+                        else if(power > 0.4)
+                            baterry_class = 'fa fa-battery-half';
+                        else
+                            baterry_class = 'fa fa-battery-quarter';
+
+                        var initial_time = waypoints[0].elapsed_time;
+                        var last_time = waypoints[waypoints.length - 1].elapsed_time;
+                        var timeBetween = last_time - initial_time;
+                        var time = waypoints[i].elapsed_time;
+                        var time_class = '';
+                        if (time/timeBetween > 0.75)
+                            time_class = 'fa fa-hourglass-end';
+                        else if(time/timeBetween > 0.4)
+                            time_class = 'fa fa-hourglass-half';
+                        else
+                            time_class = 'fa fa-hourglass-start';
+
                         if (waypoints[i].charging === 1) { //   statie electrica, ii pun si icon separat
                             L.marker([waypoints[i].lat, waypoints[i].lon], {icon: electricStationIcon}).on('click', function(e1) {
                                 popup
@@ -411,7 +432,9 @@
                             L.marker([waypoints[i].lat, waypoints[i].lon]).on('click', function(e1) {
                                 popup
                                     .setLatLng(e1.latlng)
-                                    .setContent(waypoints[i].name)
+                                    .setContent(waypoints[i].name + ' <i class="' + baterry_class + '"></i>'+
+                                        parseFloat(Math.round(power * 100) / 100).toFixed(2) + ' <i class="fa' +
+                                        time_class + '"></i>' + parseFloat(Math.round(time * 100) / 100).toFixed(2) +)
                                     .openOn(map);
                             }).addTo(map);
                         }
@@ -424,7 +447,6 @@
                 }
             });
         });
-
         
     });
 </script>
