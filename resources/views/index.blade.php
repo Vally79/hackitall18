@@ -246,13 +246,16 @@
     <!-- MAP -->
     <div id="map"></div>
 
-    <iframe id="face" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Freddit.com&layout=button_count&size=small&mobile_iframe=true&width=89&height=20&appId" width="89" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
+    <iframe id="face" width="89" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
 </section>
 <script type="text/javascript" src="{{ URL::asset('js/responsee.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('owl-carousel/owl.carousel.js') }}"></script>
 <script src="{{ URL::asset('leaflet/leaflet-search.js') }}"></script>
 <script type="text/javascript">
     jQuery(document).ready(function($) {
+        let sUrl = window.location.href;
+        let url = "https://www.facebook.com/plugins/share_button.php?href="+encodeURIComponent(sUrl)+"&layout=button_count&size=small&mobile_iframe=true&width=89&height=20&appId";
+        document.getElementById('face').setAttribute('src', url);
         var theme_slider = $("#owl-demo");
         var owl = $('#owl-demo');
         owl.owlCarousel({
@@ -379,8 +382,8 @@
 
         function ia_harta(tara)
         {
-            sUrl = window.location.href;
-            url = "https://www.facebook.com/plugins/share_button.php?href="+encodeURIComponent(sUrl)+"&layout=button_count&size=small&mobile_iframe=true&width=89&height=20&appId";
+            let sUrl = window.location.href;
+            let url = "https://www.facebook.com/plugins/share_button.php?href="+encodeURIComponent(sUrl)+"&layout=button_count&size=small&mobile_iframe=true&width=89&height=20&appId";
             document.getElementById('face').setAttribute('src', url);
             //alert("url : "+url);
             var data = {
