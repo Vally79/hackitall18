@@ -616,12 +616,13 @@
         const lon = urlParams.get('lon');
         const duration = urlParams.get('duration');
         const country = urlParams.get('country');
+        const tourism_stop = urlParams.get('tourism_stop');
         if(latS !== null && lonS !== null && lat !== null && lon !== null && duration !== null && country != null) { //just load site here
             // alert("Fac ceva");
             searchHandler.options.sourceLocationCoordinates =  {lat:latS, lng:lonS};
             searchHandler.options.destinationLocationCoordinates =  {lat:lat, lng:lon};
             $('#durationInput').val(duration);
-            ia_harta(tara = country);
+            ia_harta(tara = country, tourism_stop == null ? 0 : tourism_stop);
             // return; //optional, depinde cum vrem sa o gandim
         }
 
@@ -641,14 +642,15 @@
                 start: searchHandler.options.sourceLocationCoordinates,
                 finish: searchHandler.options.destinationLocationCoordinates,
                 duration: $('#durationInput').val(),
-                country: tara
+                country: tara,
+                tourism_stop: $('#maximumStayInput').val() ? $('#maximumStayInput').val() : 0
             };
-            const urlul = '?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration + '&country=' + data.country;
+            const urlul = '?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration + '&country=' + data.country + '&tourism_stop=' + data.tourism_stop;
             history.pushState(null, '', urlul);
             ia_harta(tara);
         });
 
-        function ia_harta(tara)
+        function ia_harta(tara, tourism)
         {
             let sUrl = window.location.href;
             let url = "https://www.facebook.com/plugins/share_button.php?href="+encodeURIComponent(sUrl)+"&layout=button_count&size=small&mobile_iframe=true&width=89&height=20&appId";
@@ -658,7 +660,8 @@
                 start: searchHandler.options.sourceLocationCoordinates,
                 finish: searchHandler.options.destinationLocationCoordinates,
                 duration: $('#durationInput').val(),
-                country: tara
+                country: tara,
+                tourism_stop: tourism
             };
             //start loading icon
             $('#loadingIcon').toggleClass('loading');
