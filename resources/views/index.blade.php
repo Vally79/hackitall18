@@ -41,7 +41,7 @@
     <style>
         #map {
             width: 100%;
-            height: 78q0px;
+            height: 780px;
             border: 1px solid #AAA;
             position: relative;
             top: 0px;
