@@ -315,6 +315,9 @@
 
         map.on('click', function(e) {
             click_count++;
+            if (click_count == 3) { //sterge tot
+                click_count = 1; //reseteaza
+            }
             //pune markerul
             let pickedIcon = '';
             if (sourceOrDestination === 'source') {
@@ -366,7 +369,11 @@
 
         $('#buton').on('click', function (e) {
             e.preventDefault();
-            var tara = geocoded_country;
+            var tara = $('#sourceLocationTextInput').val().split(',');
+            tara = tara[tara.length - 1];
+            tara = tara.substr(1);
+            if (tara === '') //inseamna ca a selectat prin click
+                tara = geocoded_country;
             var data = {
                 start: searchHandler.options.sourceLocationCoordinates,
                 finish: searchHandler.options.destinationLocationCoordinates,
