@@ -346,8 +346,24 @@ class RouteController extends Controller
 
     public function main(Request $request)
     {
+        // return distance()
         $this->country = $request->country;
-        $this->chargingStations = $this->getChargingStations();
+        $chargingStations = $this->getChargingStations();
+        $gasita = 1;
+        while($gasita == 1)
+        {
+            $gasita = 0;
+            for($i = 0; $i < count($chargingStations) && $gasita == 0; $i++)
+                for($j = $i + 1; $j < count($chargingStations) && $gasita == 0; $j++)
+                {
+                    if($this->distance($chargingStations[$i]['lat'], $chargingStations[$i]['lon'], $chargingStations[$j]['lat'], $chargingStations[$j]['lon']) < 25)
+                    {
+                        array_splice($chargingStations, $i, 1);
+                        $gasita = 1;
+                    }
+                }
+        }
+        $this->chargingStations = $chargingStations;
         $this->averageStop = $request->tourism_stop;
         $start = array();
         $start['lat'] = $request->latS;
@@ -358,7 +374,6 @@ class RouteController extends Controller
         $time = $request->duration;
 
         $route = $this->computeRoute($start, $finish, $time);
-//        dd($route);
         $rezultat = [];
         for($i = 0; $i < count($route) - 1; $i++)
         {
