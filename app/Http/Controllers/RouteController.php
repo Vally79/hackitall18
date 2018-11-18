@@ -35,7 +35,9 @@ class RouteController extends Controller
         foreach ($items as $item) {
             $coordinates[] = [
                 'lat' => $item->lat,
-                'lon' => $item->lon
+                'lon' => $item->lon,
+                'charging' => 1,
+                'name' => $item->display_name
             ];
         }
 
