@@ -11,6 +11,7 @@ class RouteController extends Controller
     private $chargingStations;
     private $visited = [];
     private $elapsed_time = 0;
+    private $country;
 
     /**
      * Return a list of coordinates for each charging station in a country.
@@ -18,10 +19,10 @@ class RouteController extends Controller
      * @param string $country
      * @return array|bool
      */
-    public function getChargingStations($country = 'japan')
+    public function getChargingStations()
     {
         $client = new Client();
-        $url = "https://nominatim.openstreetmap.org/search.php?q=charging+stations+in+$country&amenity=charging_station&format=json&limit=1000";
+        $url = "https://nominatim.openstreetmap.org/search.php?q=charging+stations+in+$this->country&amenity=charging_station&format=json&limit=1000";
         $response = $client->get($url);
 
         if ($response->getStatusCode() != 200) {
@@ -121,7 +122,7 @@ class RouteController extends Controller
         }
 
         $client = new Client();
-        $url = "https://nominatim.openstreetmap.org/search.php?q=attractions+in+japan&highway=ways" .
+        $url = "https://nominatim.openstreetmap.org/search.php?q=attractions+in+$this->country+&highway=ways" .
             "&viewbox=$leftMargin,$topMargin,$rightMargin,$bottomMargin&format=json&limit=100";
         $response = $client->get($url);
 
@@ -341,6 +342,7 @@ class RouteController extends Controller
 
     public function main(Request $request)
     {
+        $this->country = $request->country;
         $this->chargingStations = $this->getChargingStations();
         $start = array();
         $start['lat'] = $request->latS;

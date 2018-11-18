@@ -369,28 +369,35 @@
 
         $('#buton').on('click', function (e) {
             e.preventDefault();
+            var tara = $('#sourceLocationTextInput').val().split(',');
+            tara = tara[tara.length - 1];
+            tara = tara.substr(1);
             var data = {
                 start: searchHandler.options.sourceLocationCoordinates,
                 finish: searchHandler.options.destinationLocationCoordinates,
                 duration: $('#durationInput').val(),
+                country: tara
             };
-            const urlul = '?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration;
+            const urlul = '?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration + '&country=' + data.country;
             history.pushState(null, '', urlul);
             ia_harta();
         });
 
         function ia_harta()
         {
+            var tara = $('#sourceLocationTextInput').val().split(',');
+            tara = tara[tara.length - 1];
+            tara = tara.substr(1);
             var data = {
                 start: searchHandler.options.sourceLocationCoordinates,
                 finish: searchHandler.options.destinationLocationCoordinates,
                 duration: $('#durationInput').val(),
+                country: tara
             };
-            console.log(data);
             //start loading icon
             $('#loadingIcon').toggleClass('loading');
             $.ajax({
-                url: 'getRoute?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration,
+                url: 'getRoute?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration + '&country=' + data.country,
                 method: 'get',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
