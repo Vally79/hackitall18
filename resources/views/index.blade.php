@@ -628,8 +628,6 @@
         $('#buton').on('click', function (e) {
             e.preventDefault();
             var tara = $('#sourceLocationTextInputHidden').val().split(',');
-            console.log(geocoded_country);
-            console.log(tara.length);
             if (tara.length == 1) //inseamna ca a selectat prin click
                 tara = isoCountries[geocoded_country];
             else
