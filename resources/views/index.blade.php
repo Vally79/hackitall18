@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{ URL::asset('leaflet/leaflet-search.css') }}" />
     {{--<link rel="stylesheet" href="{{ URL::asset('leaflet/search-style.css') }}" />--}}
     <style>
+        * {box-sizing: border-box;}
         .search-input {
             font-family:Courier
         }
@@ -47,8 +48,8 @@
         }
 
         #roadTripDetails {
-            margin-top: 70px;
-            margin-left: 50px;
+            margin-top: 73px;
+            margin-left: 35px;
             width: 90%;
         }
 
@@ -72,6 +73,21 @@
 
         nav > div {
             height: 60px;
+        }
+
+        @media (max-width: 800px) {
+            .form-inline input {
+                margin: 10px 0;
+            }
+
+            .form-inline {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #roadTripDetails {
+                margin-left: 15px;
+            }
         }
     </style>
     <style>
@@ -198,10 +214,48 @@
         .customform .s-3 input, .customform .s-2 button#buton, .customform .s-2 input {
             min-height: 60px; !important;
         }
+    </style>
+    <style>
 
-        #roadTripDetails {
+        .form-inline {
             display: flex;
-            justify-content: center;
+            flex-flow: row wrap;
+            align-items: center;
+        }
+
+        .form-inline label {
+            margin: 5px 10px 5px 0;
+        }
+
+        .form-inline input {
+            vertical-align: middle;
+            margin: 5px 10px 5px 0;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .form-inline button {
+            padding: 10px 20px;
+            background-color: #152732;
+            border: 1px solid #ddd;
+            color: white;
+            cursor: pointer;
+        }
+
+        .form-inline button:hover {
+             background-color: #1b394c;
+         }
+
+        @media (max-width: 800px) {
+            .form-inline input {
+                margin: 10px 0;
+            }
+
+            .form-inline {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
     </style>
 </head>
@@ -224,6 +278,7 @@
     <div id="loadingIcon"></div>
     <!-- DETAILS FORM -->
     <div id="roadTripDetails" class="s-12 m-12 l-12">
+        <!--
         <form class="customform" action="">
             <div class="row">
                 <div class="s-3">
@@ -236,9 +291,14 @@
                     <button id="buton" class="btn btn-primary">Search for a plan</button>
                 </div>
             </div>
-            <div class="row">
-                <h6 id="sourceLocationTextInput"></h6> TO <h6 id="destinationLocationTextInput"></h6>
-            </div>
+        </form>
+        -->
+        <form class="form-inline" action="">
+            <label for="duration">Trip duration:</label>
+            <input type="text" id="durationInput" name="duration" placeholder="Duration of the trip (hours)">
+            <label for="tourism_stop">Average stay / attraction:</label>
+            <input type="text" id="maximumStayInput" name="tourism_stop" placeholder="Average stay (hours)">
+            <button id="buton" class="btn btn-primary" type="submit">Submit</button>
         </form>
     </div>
 
