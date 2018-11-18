@@ -623,7 +623,7 @@
             searchHandler.options.sourceLocationCoordinates =  {lat:latS, lng:lonS};
             searchHandler.options.destinationLocationCoordinates =  {lat:lat, lng:lon};
             $('#durationInput').val(duration);
-            ia_harta(tara = country, tourism_stop == null ? 0 : tourism_stop);
+            ia_harta(country, tourism_stop == null ? 0 : tourism_stop);
             // return; //optional, depinde cum vrem sa o gandim
         }
 
@@ -648,7 +648,7 @@
             };
             const urlul = '?latS=' + data.start.lat + '&lonS=' + data.start.lng + '&lat=' + data.finish.lat + '&lon=' + data.finish.lng + '&duration=' + data.duration + '&country=' + data.country + '&tourism_stop=' + data.tourism_stop;
             history.pushState(null, '', urlul);
-            ia_harta(tara, tourism = data.tourism_stop);
+            ia_harta(tara, data.tourism_stop);
         });
 
         function ia_harta(tara, tourism)
