@@ -12,6 +12,7 @@ class RouteController extends Controller
     private $visited = [];
     private $elapsed_time = 0;
     private $country;
+    private $averageStop = 0;
 
     /**
      * Return a list of coordinates for each charging station in a country.
@@ -223,7 +224,6 @@ class RouteController extends Controller
             // Otherwise, return the new route as it is the best
             return array_merge($leftRoute, $rightRoute);
         } else {
-//            dd($this->elapsed_time);
             $bestRoute = [array_merge($start, ['power_left' => 100, 'elapsed_time' => $this->elapsed_time])];
             $totalPower = 80;
             $totalTime = $max_time;
@@ -251,12 +251,12 @@ class RouteController extends Controller
                 // Add the attraction to the list
                 $bestRoute[] = array_merge($attractions[$nextNode], [
                     'power_left' => ($totalPower + 20) - $minDist * $consumption,
-                    'elapsed_time' => $lastNode['elapsed_time'] + $minDist / $avgSpeed
+                    'elapsed_time' => $lastNode['elapsed_time']  + $minDist / $avgSpeed + $this->averageStop
                 ]);
 
                 // Decrease the total power by the power consumed to reach the attraction
                 $totalPower -= $minDist * $consumption;
-                $totalTime -= $minDist / $avgSpeed;
+                $totalTime -= ($minDist / $avgSpeed + $this->averageStop);
 
                 // Mark the new attraction as visited
                 $visited[$nextNode] = true;
@@ -265,7 +265,7 @@ class RouteController extends Controller
                 // If we visited all the attractions, we don't have enough power left to reach the destination,
                 // or we aren't reaching our destination in time, break
                 if (count($visited) == count($attractions) || $totalPower - $dist * $consumption <= 0 ||
-                    $totalTime - $dist / $avgSpeed <= 0) {
+                    $totalTime - $dist / $avgSpeed - (isset($finish['charging']) ? (80 - $dist * $consumption) / 40 : 0) <= 0) {
                     break;
                 }
 
@@ -273,21 +273,20 @@ class RouteController extends Controller
 
             $dist = $this->distance(end($bestRoute)['lat'], end($bestRoute)['lon'], $finish['lat'], $finish['lon']);
 
-            $totalPower -= $dist * $consumption;
-            $totalTime -= $dist / $avgSpeed;
-
             // If we stopped because we didn't have enough power remaining to reach the destination, or we didn't
             // have enough time left, remove the last attraction
-            if ($totalPower <= 0 || $totalTime < 0) {
+            if ($totalPower - $dist * $consumption <= 0 || $totalTime - ($dist / $avgSpeed + (isset($finish['charging']) ? (80 - $dist * $consumption) / 40 : 0)) < 0) {
                 array_pop($bestRoute);
             }
+
+            $totalTime -= ($dist / $avgSpeed + (isset($finish['charging']) ? (80 - $dist * $consumption) / 40 : 0));
 
             foreach ($bestRoute as $value) {
                 $this->visited[json_encode($value)] = true;
             }
 
             $bestRoute[] = array_merge($finish, [
-                'elapsed_time' => end($bestRoute)['elapsed_time'] + $dist / $avgSpeed,
+                'elapsed_time' => end($bestRoute)['elapsed_time'] + $dist / $avgSpeed + (isset($finish['charging']) ? (80 - $dist * $consumption) / 40 : 0),
                 'power_left' => end($bestRoute)['power_left'] - $dist * $consumption
             ]);
 
@@ -309,6 +308,7 @@ class RouteController extends Controller
 
                 $startTime = $startDist / ($startDist + $finishDist) * $max_time;
                 $finishTime = $max_time - $startTime;
+                $saveTime = $this->elapsed_time;
 
                 // If there was no left route found, return the best route
                 $saveStations = $visitedStations;
@@ -317,10 +317,12 @@ class RouteController extends Controller
                     $visitedStations = $saveStations;
                     return $bestRoute;
                 }
+                $this->elapsed_time = end($startRoute)['elapsed_time'];
 
                 // Same for right route
                 $finishRoute = $this->computeRoute($chosen_station, $finish, $finishTime, $visitedStations);
                 if (!$finishRoute) {
+                    $this->elapsed_time = $saveTime;
                     $visitedStations = $saveStations;
                     return $bestRoute;
                 }
@@ -332,6 +334,8 @@ class RouteController extends Controller
                 if (count($newRoute) - 1 > count($bestRoute)) {
                     $this->elapsed_time = end($newRoute)['elapsed_time'];
                     $bestRoute = $newRoute;
+                } else {
+                    $this->elapsed_time = $saveTime;
                 }
             }
 
@@ -344,6 +348,7 @@ class RouteController extends Controller
     {
         $this->country = $request->country;
         $this->chargingStations = $this->getChargingStations();
+        $this->averageStop = $request->tourism_stop;
         $start = array();
         $start['lat'] = $request->latS;
         $start['lon'] = $request->lonS;
@@ -359,7 +364,6 @@ class RouteController extends Controller
         {
             $a = $route[$i];
             $b = $route[$i + 1];
-            sleep(0.01);
             $rezultat = array_merge($rezultat, $this->getRoute($a, $b)['coordinates']);
         }
 
