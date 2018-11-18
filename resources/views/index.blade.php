@@ -450,7 +450,7 @@
                                     .setLatLng(e1.latlng)
                                     .setContent(waypoints[i].name + ' <i class="' + baterry_class + '"></i>'+
                                         parseFloat(Math.round(power * 100) / 100).toFixed(2) + ' <i class="fa' +
-                                        time_class + '"></i>' + parseFloat(Math.round(time * 100) / 100).toFixed(2) +)
+                                        time_class + '"></i>' + parseFloat(Math.round(time * 100) / 100).toFixed(2))
                                     .openOn(map);
                             }).addTo(map);
                         }
