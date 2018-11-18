@@ -190,6 +190,15 @@
                 transform: rotate(360deg);
             }
         }
+
+        .customform .s-3 input, .customform .s-2 button#buton, .customform .s-2 input {
+            min-height: 60px; !important;
+        }
+
+        #roadTripDetails {
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="size-1140">
@@ -200,15 +209,13 @@
 <!-- TOP NAV WITH LOGO -->
 <header>
     <nav>
-        <div class="line">
-            <div class="s-12 l-2">
+        <div class="line" style="height:70px">
+            <div class="text-center, s-12 l-2">
                 <p class="logo"><strong>FUN</strong>&nbsp;TRAVELLING</p>
             </div>
             <div class="top-nav s-12 l-10">
-                <p class="nav-text">Custom menu text</p>
                 <ul class="right">
-                    <li class="active-item"><a href="#carousel">Home</a></li>
-                    <li><a href="#about-us">About Us</a></li>
+                    <li></li>
                 </ul>
             </div>
         </div>
@@ -218,7 +225,6 @@
     <div id="loadingIcon"></div>
     <!-- DETAILS FORM -->
     <div id="roadTripDetails" class="s-12 m-12 l-12">
-        <h3>Your road trip details</h3>
         <form class="customform" action="">
             <div class="s-3">
                 <input name="source" id="sourceLocationTextInput" placeholder="Start (pick from map)" type="text" disabled />
