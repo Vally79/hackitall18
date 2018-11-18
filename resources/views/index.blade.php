@@ -232,10 +232,28 @@
             <div class="s-2">
                 <button id="buton" class="btn btn-primary">Search a plan</button>
             </div>
+
         </form>
     </div>
+
+
     <!-- MAP -->
     <div id="map"></div>
+
+    <div class="s-2" id="fb-root"></div>
+    <script>(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
+    <!-- Your share button code -->
+    <div class="fb-share-button"
+         data-href= window.location.href
+         data-layout="button_count">
+    </div>
 </section>
 <script type="text/javascript" src="{{ URL::asset('js/responsee.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('owl-carousel/owl.carousel.js') }}"></script>
@@ -378,7 +396,7 @@
                         iconSize: [32, 32], // size of the icon
                     });
 
-                    for(let i = 1; i < waypoints.length; i++) {
+                    for(let i = 0; i < waypoints.length; i++) {
                         if (waypoints[i].charging === 1) { //   statie electrica, ii pun si icon separat
                             L.marker([waypoints[i].lat, waypoints[i].lon], {icon: electricStationIcon}).on('click', function(e1) {
                                 popup
@@ -396,7 +414,7 @@
                             }).addTo(map);
                         }
 
-                        console.log(waypoints[i].name);
+                        console.log(waypoints[i]);
                     }
 
                     //stop loading icon
