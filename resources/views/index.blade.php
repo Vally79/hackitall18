@@ -247,6 +247,7 @@
     <div id="map"></div>
 
     <iframe id="face" width="89" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
+    <input hidden type="text" id="sourceLocationTextInputHidden" />
 </section>
 <script type="text/javascript" src="{{ URL::asset('js/responsee.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('owl-carousel/owl.carousel.js') }}"></script>
@@ -317,6 +318,15 @@
             click_count++;
             if (click_count == 3) { //sterge tot
                 click_count = 1; //reseteaza
+                //sterge si toate marcherele si tot
+                map.eachLayer(function (layer) {
+                    map.removeLayer(layer);
+                });
+                //readuga primul strat
+                L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    subdomains: ['a', 'b', 'c']
+                }).addTo( map );
             }
             //pune markerul
             let pickedIcon = '';
@@ -369,9 +379,10 @@
 
         $('#buton').on('click', function (e) {
             e.preventDefault();
-            var tara = $('#sourceLocationTextInput').val().split(',');
+            var tara = $('#sourceLocationTextInputHidden').val().split(',');
             tara = tara[tara.length - 1];
             tara = tara.substr(1);
+            console.log(tara);
             if (tara === '') //inseamna ca a selectat prin click
                 tara = geocoded_country;
             var data = {
