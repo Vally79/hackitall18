@@ -552,7 +552,6 @@
         }).addTo( map );
 
         var sourceOrDestination = 'source';
-        var geocoded_country;
         var startIcon = L.icon({
             iconUrl: 'start_black.png',
             iconSize: [32, 32], // size of the icon
@@ -630,10 +629,10 @@
         $('#buton').on('click', function (e) {
             e.preventDefault();
             var tara = searchHandler.options._country.split(',');
-            console.log(geocoded_country);
+            console.log(window.geocoded_country);
             console.log(tara.length);
             if (tara.length == 1) //inseamna ca a selectat prin click
-                tara = isoCountries[geocoded_country];
+                tara = isoCountries[window.geocoded_country];
             else
             {
                 tara = tara[tara.length - 1];
@@ -761,7 +760,7 @@
         }
 
         geocode = MQ.geocode().on('success', function(e) {
-            geocoded_country = e.result.best.adminArea1;
+            window.geocoded_country = e.result.best.adminArea1;
         });
 
     });
