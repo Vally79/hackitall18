@@ -230,7 +230,7 @@
                     <input id= "durationInput" name="duration" placeholder="Duration of the trip (hours)" type="text" />
                 </div>
                 <div class="s-3">
-                    <input id= "maximumStayInput" name="tourism_stay    " placeholder="Maximum stay (hours)" type="text" />
+                    <input id= "maximumStayInput" name="tourism_stop" placeholder="Maximum stay (hours)" type="text" />
                 </div>
                 <div class="s-2">
                     <button id="buton" class="btn btn-primary">Search for a plan</button>
@@ -628,6 +628,8 @@
         $('#buton').on('click', function (e) {
             e.preventDefault();
             var tara = $('#sourceLocationTextInputHidden').val().split(',');
+            console.log(geocoded_country);
+            console.log(tara.length);
             if (tara.length == 1) //inseamna ca a selectat prin click
                 tara = isoCountries[geocoded_country];
             else
