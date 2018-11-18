@@ -240,20 +240,7 @@
     <!-- MAP -->
     <div id="map"></div>
 
-    <div class="s-2" id="fb-root"></div>
-    <script>(function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
-
-    <!-- Your share button code -->
-    <div class="fb-share-button"
-         data-href= window.location.href
-         data-layout="button_count">
-    </div>
+    <iframe id="face" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Freddit.com&layout=button_count&size=small&mobile_iframe=true&width=89&height=20&appId" width="89" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
 </section>
 <script type="text/javascript" src="{{ URL::asset('js/responsee.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('owl-carousel/owl.carousel.js') }}"></script>
@@ -386,6 +373,10 @@
 
         function ia_harta(tara)
         {
+            sUrl = window.location.href;
+            url = "https://www.facebook.com/plugins/share_button.php?href="+encodeURIComponent(sUrl)+"&layout=button_count&size=small&mobile_iframe=true&width=89&height=20&appId";
+            document.getElementById('face').setAttribute('src', url);
+            //alert("url : "+url);
             var data = {
                 start: searchHandler.options.sourceLocationCoordinates,
                 finish: searchHandler.options.destinationLocationCoordinates,
