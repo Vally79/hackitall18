@@ -355,7 +355,7 @@ class RouteController extends Controller
             for($i = 0; $i < count($chargingStations) && $gasita == 0; $i++)
                 for($j = $i + 1; $j < count($chargingStations) && $gasita == 0; $j++)
                 {
-                    if($this->distance($chargingStations[$i]['lat'], $chargingStations[$i]['lon'], $chargingStations[$j]['lat'], $chargingStations[$j]['lon']) < 25)
+                    if($this->distance($chargingStations[$i]['lat'], $chargingStations[$i]['lon'], $chargingStations[$j]['lat'], $chargingStations[$j]['lon']) < 105)
                     {
                         array_splice($chargingStations, $i, 1);
                         $gasita = 1;
