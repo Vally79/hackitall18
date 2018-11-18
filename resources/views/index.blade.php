@@ -230,7 +230,7 @@
                 <input id= "durationInput" name="duration" placeholder="Duration of the trip (hours)" title="Your name" type="text" />
             </div>
             <div class="s-2">
-                <button id="buton" class="btn btn-primary">Search a plan</button>
+                <button id="buton" class="btn btn-primary">Search for a plan</button>
             </div>
 
         </form>
@@ -415,20 +415,20 @@
                     });
 
                     for(let i = 0; i < waypoints.length; i++) {
-                        var power = waypoints[i].power_left;
-                        var baterry_class = '';
-                        if (power > 0.75)
+                        let power = waypoints[i].power_left;
+                        let baterry_class = '';
+                        if (power > 75)
                             baterry_class = 'fa fa-battery-full';
-                        else if(power > 0.4)
+                        else if(power > 40)
                             baterry_class = 'fa fa-battery-half';
                         else
                             baterry_class = 'fa fa-battery-quarter';
 
-                        var initial_time = waypoints[0].elapsed_time;
-                        var last_time = waypoints[waypoints.length - 1].elapsed_time;
-                        var timeBetween = last_time - initial_time;
-                        var time = waypoints[i].elapsed_time;
-                        var time_class = '';
+                        let initial_time = waypoints[0].elapsed_time;
+                        let last_time = waypoints[waypoints.length - 1].elapsed_time;
+                        let timeBetween = last_time - initial_time;
+                        let time = waypoints[i].elapsed_time;
+                        let time_class = '';
                         if (time/timeBetween > 0.75)
                             time_class = 'fa fa-hourglass-end';
                         else if(time/timeBetween > 0.4)
