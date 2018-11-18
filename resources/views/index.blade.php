@@ -34,6 +34,9 @@
     <script type="text/javascript" src="{{ URL::asset('js/jquery-ui.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/template-scripts.js') }}"></script>
 
+    <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=nXGrQeoF16GQSTotAzba7GHuG2ui8fmJ"></script>
+    <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-geocoding.js?key=nXGrQeoF16GQSTotAzba7GHuG2ui8fmJ"></script>
+
     <style>
         #map {
             width: 100%;
@@ -250,6 +253,7 @@
 <script src="{{ URL::asset('leaflet/leaflet-search.js') }}"></script>
 <script type="text/javascript">
     jQuery(document).ready(function($) {
+        var click_count = 0;
         let sUrl = window.location.href;
         let url = "https://www.facebook.com/plugins/share_button.php?href="+encodeURIComponent(sUrl)+"&layout=button_count&size=small&mobile_iframe=true&width=89&height=20&appId";
         document.getElementById('face').setAttribute('src', url);
@@ -299,6 +303,7 @@
         }).addTo( map );
 
         var sourceOrDestination = 'source';
+        var geocoded_country;
         var startIcon = L.icon({
             iconUrl: 'start_black.png',
             iconSize: [32, 32], // size of the icon
@@ -309,6 +314,7 @@
         });
 
         map.on('click', function(e) {
+            click_count++;
             //pune markerul
             let pickedIcon = '';
             if (sourceOrDestination === 'source') {
@@ -324,9 +330,11 @@
             L.marker([e.latlng.lat, e.latlng.lng], {icon: pickedIcon}).addTo(map);
             map.setView([e.latlng.lat, e.latlng.lng], 10);
             searchHandler.options.sourceOrDestinationOption = sourceOrDestination;
+
+            geocode.reverse(e.latlng);
         });
 
-        var popup = L.popup();
+        var popup = L.popup(), geocode, map;
         var searchHandler;
         map.addControl( searchHandler = new L.Control.Search({
             url: 'http://nominatim.openstreetmap.org/search?format=json&q={s}',
@@ -358,9 +366,7 @@
 
         $('#buton').on('click', function (e) {
             e.preventDefault();
-            var tara = $('#sourceLocationTextInput').val().split(',');
-            tara = tara[tara.length - 1];
-            tara = tara.substr(1);
+            var tara = geocoded_country;
             var data = {
                 start: searchHandler.options.sourceLocationCoordinates,
                 finish: searchHandler.options.destinationLocationCoordinates,
@@ -478,6 +484,10 @@
                 }
             });
         }
+
+        geocode = MQ.geocode().on('success', function(e) {
+            geocoded_country = e.result.best.adminArea1;
+        });
 
     });
 </script>
